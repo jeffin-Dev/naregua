@@ -1,0 +1,75 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom, #2980B9, #FFFFFF);
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.token {
+    padding: 10px;
+    margin: 5px;
+    width: 40px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: inline-block; /* Para exibir os campos de token em linha */
+}
+
+.btn:hover {
+    background-color: white;
+    color: #007bff;
+}
+
+.btn {
+    padding: 10px 20px;
+    margin-top: 10px; /* Reduzindo a margem superior para que o botão fique mais próximo dos tokens */
+    width: 100%;
+    max-width: 300px;
+    border-color: #007bff;
+    border-style: solid;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.message {
+    text-align: center;
+    margin-top: 10px; /* Espaçamento entre os tokens e a mensagem flash */
+}
+
+
+
+.alert-error {
+    color: red;
+    background-color:#ffcccc; 
+    border-radius: 5px; 
+    padding: 10px; 
+    font-weight: bold;
+    margin-top: 25px;
+}

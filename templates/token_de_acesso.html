@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/verificarEmail/verifEmail.css">
+    <link rel="shortcut icon" href="../static/imgs/nareguaRemoved.png" type="image/x-icon">
+    <title>Na Régua - Autenticar E-mail</title>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Verificação de E-mail</h2>
+        <form action="/coletar_token" method="post">
+            <div class="form-container">
+                <div class="tokens-container">
+                    <input type="text" id="token1" name="token1" maxlength="1" class="token" required>
+                    <input type="text" id="token2" name="token2" maxlength="1" class="token" required>
+                    <input type="text" id="token3" name="token3" maxlength="1" class="token" required>
+                    <input type="text" id="token4" name="token4" maxlength="1" class="token" required>
+                    <input type="text" id="token5" name="token5" maxlength="1" class="token" required>
+                    <input type="text" id="token6" name="token6" maxlength="1" class="token" required>
+                </div>
+                <div class="flash-message">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                </div>
+                <input id="btn" class="btn" type="submit" value="Verificar">
+            </div>
+        </form>
+    </div>
+    <script src="../static/verificarEmail/verifEmail.js"></script>
+</body>
+
+</html>

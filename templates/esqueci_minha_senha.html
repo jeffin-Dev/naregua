@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/esqSenha/esqueci.css">
+    <link rel="shortcut icon" href="../static/imgs/nareguaRemoved.png" type="image/x-icon">
+    <title>Na Régua - Esqueci Minha Senha</title>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Esqueci Minha Senha</h2>
+        <div class="form-container">
+            <form action="/coletar_email_recuperar" method="post">
+                <input style="height: 20px; width: 230px;" type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+                <br>
+                <input id="btn" class="btn" type="submit" value="Enviar"></input>
+            </form>
+
+            <strong><h5 style="text-decoration:underline; color: red; margin-top: 30px;" >OBS: UTILIZE O E-MAIL FEITO NO SEU CADASTRO.</h5></strong>
+            <strong><p style="font-size: 14px; margin-top: 5px;">Será enviado para o seu e-mail um código de verificação.<br>Precisamos validar o seu usuário</p></strong>
+        </div>
+        <a href="{{ url_for('login') }}">
+            <strong><p class="voltar">Voltar para o Início</p></strong>
+        </a>
+        <div id="message" class="message"></div>
+    </div>
+    <script src="../static/esqSenha/esqSenha.js"></script>
+    
+</body>
+
+</html>

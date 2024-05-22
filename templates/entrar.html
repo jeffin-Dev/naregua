@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/entrar/entrar.css">
+    <link rel="shortcut icon" href="../static/imgs/nareguaRemoved.png" type="image/x-icon">
+    <title>Na Régua</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="logo-container">
+                <img class="logo" src="../static/imgs/logo.jpg" alt="">
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <a href="{{ url_for('barber') }}">
+                <button class="inicio"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" viewBox="0 0 16 16">
+                        <path
+                            d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5" />
+                    </svg></button>
+            </a>
+            <form class="form" action="/coletar-login" method="post">
+                <input id="username" name="username" class="inpt" placeholder="Email ou Telefone" type="text"
+                    oninput="checkInput(this)"><br>
+                <div class="password-container">
+                    <input id="password" name="password" placeholder="Senha" class="inpt" type="password">
+                </div>
+                <input class="btn" type="submit" value="Entrar"></input>
+            </form>
+
+            <div class="form-links">
+                <a href="{{ url_for('cadastrar') }}" class="create-link">Criar Conta</a>
+                <a href="{{ url_for('esq_senha') }}" class="forgot-link">Esqu. senha</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/entrar/entrar.js"></script>
+</body>
+
+</html>

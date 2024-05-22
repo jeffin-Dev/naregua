@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/esqSenha/esqueci.css">
+    <link rel="shortcut icon" href="../static/imgs/nareguaRemoved.png" type="image/x-icon">
+    <title>Na Régua - Criar nova senha</title>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Crie sua nova senha</h2>
+        <form action="/coletar_nova_senha" method="post">
+            <div class="form-container">
+                <input type="password" name="senha" id="senha" placeholder="Digite sua nova senha" required>
+                <input type="password" name="confirmarSenha" id="confirmarSenha" placeholder="Confirme sua nova senha"
+                    required>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" style="font-size: 12px;">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+                <input id="btn" class="btn" type="submit" value="Enviar">
+        </form>
+    </div>
+    </div>
+    <script src="../static/esqSenha/esqSenha.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,453 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+.result {
+    color: black;
+}
+
+.btnDropdown {
+    background-color: black;
+    color: white;
+    border: none;
+    font-weight: bold;
+}
+
+.container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    margin-top: 100px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#reservas-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.card {
+    background: #007BFF;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+.card p {
+    margin: 10px 0;
+}
+
+.card span {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #ddd;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+}
+
+.btn-btn-secondary-dropdown-toggle {
+    background-color: black;
+    font-weight: bold;
+    color: white;
+    border: none;
+}
+
+.dropdown-menu {
+    background-color: #f8f9fa;
+    border: 1px solid #000;
+}
+
+.dropdown-menu a.dropdown-item {
+    color: #000;
+}
+
+.dropdown-menu a.dropdown-item:hover {
+    background-color: #DCDCDC;
+    border-radius: 5px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1);
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin: 20px auto;
+}
+
+.card-header {
+    background-color: #f2f2f2;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.card-header h2 {
+    margin: 0;
+}
+
+.card-body {
+    padding: 10px;
+}
+
+.card-footer {
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
+.btn-agendar {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-agendar:hover {
+    background-color: #0056b3;
+}
+
+.logo {
+    width: 45px;
+    border-radius: 50%;
+}
+
+.header,
+.navigation_header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.header {
+    background-color: black;
+    height: 3.5em;
+    justify-content: space-between;
+    padding: 0 3%;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.navigation_header {
+    gap: 3em;
+    z-index: 2;
+}
+
+.navigation_header a {
+    text-decoration: none;
+    color: white;
+    transition: 1s;
+    font-weight: bold;
+}
+
+.content {
+    text-align: center;
+    padding-top: 19px;
+    height: 100vh;
+    transition: 1s;
+}
+
+.btn_icon_header {
+    display: none;
+    border: none;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+}
+
+.barber-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.barber-card {
+    width: calc(33.33% - 20px);
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.barber-card img {
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.barber-card .details {
+    padding: 20px;
+}
+
+.barber-card h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.barber-card p {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.barber-card button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #000;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.barber-card button:hover {
+    background-color: #333;
+}
+
+@media screen and (max-width: 600px) {
+    .btn_icon_header {
+        display: block;
+    }
+
+    .barber-carousel {
+        overflow-x: hidden;
+    }
+
+    .barber-cards {
+        display: flex;
+    }
+
+    .barber-card {
+        flex: 0 0 auto;
+        margin-right: 20px;
+    }
+
+    .navigation_header {
+        position: fixed;
+        flex-direction: column;
+        top: 0;
+        background-color: black;
+        height: 100%;
+        width: 35vw;
+        padding: 1em;
+        animation-duration: 1s;
+        margin-left: -100vw;
+    }
+}
+
+@keyframes showSidebar {
+    from {
+        margin-left: -100vw;
+    }
+
+    top {
+        margin-left: -3vw;
+    }
+}
+
+.jobs {
+    position: center;
+    padding: 0px 20px;
+    border: none;
+    border-radius: 50%;
+    height: 90px;
+}
+
+.carousel {
+    display: flex;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+}
+
+.slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+}
+
+hr {
+    color: #ccc;
+    background-color: #ccc;
+    height: 1px;
+    border: none;
+}
+
+::-webkit-scrollbar-horizontal {
+    display: none;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.gradeHorario table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.gradeHorario td {
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+.gradeHorario td {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.gradeHorario td:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: black;
+    font-weight: bold;
+}
+
+.horariosGrid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 10px;
+}
+
+.horario {
+    border: 1px solid #ccc;
+    text-align: center;
+    width: 50px;
+    cursor: pointer;
+}
+
+.horario:hover {
+    background-color: greenyellow;
+    color: black;
+    font-weight: bold;
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .horariosGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .horariosGrid {
+        grid-template-columns: repeat(2, 1fr);
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+    }
+}
+
+/* Estilos específicos para os cards de reserva */
+
+#reservas-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.card {
+    background: #007BFF;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+.card p {
+    margin: 10px 0;
+}
+
+.card span.status-text {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: black;
+    font-weight: bold;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+}
+
+.btn-confirmar,
+.btn-cancelar {
+    padding: 10px 20px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn-cancelar {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    width: 110px;
+}
+
+.btn-cancelar:hover {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+.form-control{
+    width: 150px;
+}
+
