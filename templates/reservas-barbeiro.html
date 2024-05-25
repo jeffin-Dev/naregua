@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Na Régua - Reservas do Barbeiro</title>
+    <title>Na Régua - Agendamentos</title>
     <link rel="stylesheet" href="../static/reservas/reservas.css">
     <link rel="stylesheet" href="../static/reserva-barbeiro/res-bar.css">
     <link rel="stylesheet" href="../static/perfil/perfil.css">
@@ -32,18 +32,19 @@
         {% endblock %}
     </header>
     <div class="container mt-5">
-        <h1>Reservas</h1>
+        <h1>Agendamentos</h1>
         <div class="container">
             <div class="row">
-                {% for agendamento in agendamentos %}
+                {% for agenda in agendas %}
                 <div class="card col-6">
-                    <h4>Cliente: {{ agendamento.usuario.nomeUsuario }}</h4>
-                    <p><strong>Serviço:</strong> {{ agendamento.preco_servico.servico.nomeServico }}</p>
-                    <p><strong>Data:</strong> {{ agendamento.dataAtendimento.strftime('%d/%m/%Y') }}</p>
-                    <p><strong>Horário:</strong> {{ agendamento.horarioAtendimento.strftime('%H:%M') }}</p>
-                    <p><strong>Status:</strong> {{ agendamento.status.descricao }}</p>
-                    <p><strong>Telefone para contato:</strong> {{ agendamento.usuario.telefone }}</p>
-                    <p><strong>Email para contato:</strong> {{ agendamento.usuario.email  }} </p>
+                    <h4>Cliente: {{ agenda.usuario_fk.nomeUsuario }}</h4>
+                    <p><strong>Serviço:</strong> {{ agenda.preco_servico_fk.servico.nomeServico }}</p>
+                    <p><strong>Valor do serviço:</strong> {{ agenda.preco_servico_fk.PrecoServico }}</p>
+                    <p><strong>Data:</strong> {{ agenda.dataAtendimento.strftime('%d/%m/%Y') }}</p>
+                    <p><strong>Horário:</strong> {{ agenda.horarioAtendimento.strftime('%H:%M') }}</p>
+                    <p><strong>Status:</strong> {{ agenda.status_fk.descricao }}</p>
+                    <p><strong>Telefone para contato:</strong> {{ agenda.usuario_fk.telefone }}</p>
+                    <p><strong>Email para contato:</strong> {{ agenda.usuario_fk.email  }} </p>
                 </div>
                 {% endfor %}
             </div>

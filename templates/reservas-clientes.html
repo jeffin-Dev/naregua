@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Na Régua - Minhas Reservas</title>
     <link rel="stylesheet" href="../static/reservas/reservas.css">
-    <link rel="stylesheet" href="../static/perfil/perfil.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="shortcut icon" href="../static/imgs/nareguaRemoved.png" type="image/x-icon">
@@ -36,17 +35,25 @@
         {% endblock %}
         <div class="mt-5">
             <h1>Minhas Reservas</h1>
-
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
             <div class="row">
-                {% for reserva in reservas %}
-                <div class="col-6">
-                    <div class="card">
-                        <p>Barbearia: {{ reserva.preco_servico.barbearia.nomeBarbearia }}</p><br>
-                        <p> Serviço: {{ reserva.preco_servico.servico.nomeServico }}</p><br>
-                        <p> Data: {{ reserva.dataAtendimento.strftime('%d/%m/%Y') }}</p><br>
-                        <p> Horário: {{ reserva.horarioAtendimento.strftime('%H:%M') }}</p><br>
-                        <p> Status: {{ reserva.status.descricao }}</p>
-                    </div>
+                {% for agenda in agendas %}
+                <div class="card">
+
+                    <p>Barbearia: {{ agenda.preco_servico_fk.barbearia.nomeBarbearia }}</p>
+                    <p> Serviço: {{ agenda.preco_servico_fk.servico.nomeServico }} </p>
+                    <p> Data: {{ agenda.dataAtendimento.strftime('%d/%m/%Y') }}</p>
+                    <p> Horário: {{ agenda.horarioAtendimento.strftime('%H:%M') }}</p>
+                    <p> Status: {{ agenda.status_fk.descricao }}</p>
+                    <p>Valor: {{ agenda.preco_servico_fk.PrecoServico }}</p>
                 </div>
                 {% endfor %}
             </div>
@@ -55,9 +62,7 @@
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
                 crossorigin="anonymous"></script>
-            <script src="../static/reservas/reservas.js"></script>
             <script src="../static/homepage/homepage.js"></script>
-            <script src="../static/reservas/calendario.js"></script>
     </body>
 
 </html>

@@ -254,3 +254,22 @@ hr {
 body {
     overflow-x: hidden;
 }
+
+.alert-error {
+    color: rgb(0, 0, 0);
+    margin-bottom: 10px; 
+    background-color: rgb(219, 169, 169); 
+    border-radius: 5px; 
+    padding: 10px; 
+    font-weight: bold;
+    text-align: center;
+}
+
+.alert-success {
+    color: green;
+    margin-bottom: 10px; 
+    background-color: rgb(156, 238, 156); 
+    border-radius: 5px; 
+    padding: 10px; 
+    font-weight: bold;
+}

@@ -1,0 +1,76 @@
+.body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.checkbox{
+    border-radius: 50px;
+}
+
+.containerBody {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.servico {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.servico label {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.servico input[type="text"] {
+    width: 60px;
+}
+
+.btnA {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #007BFF;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btnA:hover {
+    background-color: #0056b3;
+}
+
+.alert-error {
+    color: red;
+    margin-bottom: 10px; 
+    border-radius: 5px; 
+    padding: 10px; 
+    font-weight: bold;
+    text-align: center;
+}
+
+.alert-success {
+    color: green;
+    margin-bottom: 10px; 
+    background-color: rgb(156, 238, 156); 
+    border-radius: 5px; 
+    padding: 10px; 
+    font-weight: bold;
+}

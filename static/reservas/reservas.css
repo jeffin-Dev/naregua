@@ -37,37 +37,8 @@ h1 {
     margin-bottom: 20px;
 }
 
-#reservas-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
 
-.card {
-    background: #007BFF;
-    color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 300px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
 
-.card h2 {
-    margin-top: 0;
-}
-
-.card p {
-    margin: 10px 0;
-}
-
-.card span {
-    display: block;
-    margin-top: 10px;
-    font-size: 0.9em;
-    color: #ddd;
-}
 
 * {
     margin: 0;
@@ -110,43 +81,15 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 250;
     margin: 20px auto;
 }
 
-.card-header {
-    background-color: #f2f2f2;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-}
 
 .card-header h2 {
     margin: 0;
 }
 
-.card-body {
-    padding: 10px;
-}
-
-.card-footer {
-    text-align: center;
-    padding: 10px;
-    border-top: 1px solid #ccc;
-}
-
-.btn-agendar {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.btn-agendar:hover {
-    background-color: #0056b3;
-}
 
 .logo {
     width: 45px;
@@ -289,24 +232,6 @@ body {
     }
 }
 
-.jobs {
-    position: center;
-    padding: 0px 20px;
-    border: none;
-    border-radius: 50%;
-    height: 90px;
-}
-
-.carousel {
-    display: flex;
-    overflow-x: scroll;
-    scroll-snap-type: x mandatory;
-}
-
-.slide {
-    flex: 0 0 100%;
-    scroll-snap-align: start;
-}
 
 hr {
     color: #ccc;
@@ -323,47 +248,6 @@ body {
     overflow-x: hidden;
 }
 
-.gradeHorario table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.gradeHorario td {
-    border: 1px solid #ccc;
-    text-align: center;
-}
-
-.gradeHorario td {
-    background-color: black;
-    color: white;
-    cursor: pointer;
-}
-
-.gradeHorario td:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-    color: black;
-    font-weight: bold;
-}
-
-.horariosGrid {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 10px;
-}
-
-.horario {
-    border: 1px solid #ccc;
-    text-align: center;
-    width: 50px;
-    cursor: pointer;
-}
-
-.horario:hover {
-    background-color: greenyellow;
-    color: black;
-    font-weight: bold;
-    border: none;
-}
 
 @media (max-width: 768px) {
     .horariosGrid {
@@ -400,54 +284,26 @@ body {
     position: relative;
 }
 
-.card h2 {
-    margin-top: 0;
-}
 
 .card p {
     margin: 10px 0;
 }
 
-.card span.status-text {
-    display: block;
-    margin-top: 10px;
-    font-size: 0.9em;
-    color: black;
+
+.alert-error {
+    color: red;
+    margin-bottom: 10px; 
+    background-color:#ffcccc; 
+    border-radius: 5px; 
+    padding: 10px; 
     font-weight: bold;
 }
 
-.btn-container {
-    display: flex;
-    justify-content: space-between;
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-}
-
-.btn-confirmar,
-.btn-cancelar {
-    padding: 10px 20px;
-    border: 2px solid transparent;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, border-color 0.3s;
-}
-
-.btn-cancelar {
-    background-color: black;
-    color: white;
+.alert-success {
+    color: green;
+    margin-bottom: 10px; 
+    background-color: rgb(156, 238, 156); 
+    border-radius: 5px; 
+    padding: 10px; 
     font-weight: bold;
-    width: 110px;
 }
-
-.btn-cancelar:hover {
-    background-color: #dc3545;
-    color: white;
-    border-color: #dc3545;
-}
-
-.form-control{
-    width: 150px;
-}
-

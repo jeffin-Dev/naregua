@@ -21,109 +21,40 @@
         <section class="barbers">
             <div class="container">
                 <h2>Barbeiros Disponíveis</h2>
-                <div id="carouselExampleIndicators" class="carousel slide">
-                    <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                            class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                            aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                            aria-label="Slide 3"></button>
-                    </div>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h2>João da Silva</h2>
-                                    <p>Especialidade: Corte Masculino</p>
-                                </div>
-                                <div class="card-body">
-                                    <p>Idade: 35 anos</p>
-                                    <p>Valor do Serviço: R$ 50,00</p>
-                                </div>
-                                <div class="card-footer">
-                                    <a href="{{ url_for('agendamento') }}"><button
-                                            class="btn-agendar">Agendar</button></a>
-                                </div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+                <div class="row">
+                    {% for barbearia, valor_servico, id_servico in barbearias_valores %}
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>{{ barbearia.nomeBarbearia }}</h2>
+                                <p>{{ nome_servico }}</p>
+                            </div>
+                            <div class="card-body">
+                                <p>Valor do Serviço: R${{ valor_servico }}</p>  <!-- Acessa o valor do serviço -->
+                            </div>
+                            <div class="card-footer">
+                                <a href="{{ url_for('agendamento', nome_barbearia=barbearia.nomeBarbearia, id_servico=id_servico) }}">
+                                    <button class="btn-agendar">Agendar</button>
+                                </a>
                             </div>
                         </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+                    {% endfor %}
                 </div>
             </div>
         </section>
         <br>
         <hr>
-
-        <section class="barbers">
-            <div class="container">
-                <h2>Barbearias disponíveis</h2>
-                <div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h2>Barbearia Fagundes</h2>
-                                    <p>Especialidade: Corte Masculino</p>
-                                </div>
-                                <div class="card-body">
-                                </div>
-                                <div class="card-footer">
-                                    <button class="btn-agendar">Agendar</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h2>Barbearia Neves</h2>
-                                    <p>Especialidade: Corte Masculino</p>
-                                </div>
-                                <div class="card-body">
-                                </div>
-                                <div class="card-footer">
-                                    <button class="btn-agendar">Agendar</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h2>Bené du Corte</h2>
-                                    <p>Especialidade: Corte Masculino</p>
-                                </div>
-                                <div class="card-body">
-                                </div>
-                                <div class="card-footer">
-                                    <button class="btn-agendar">Agendar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="carousel-control-prev" type="button"
-                        data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button"
-                        data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-            </div>
-        </section>
     </main>
-
     <br><br><br><br><br>
 
     <footer>

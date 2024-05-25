@@ -22,7 +22,7 @@
         </button>
         <a href="{{ url_for('barber') }}">Inicio</a>
 
-        {% if barbeiro == 1 %}
+        {% if current_user.barbeiro == '1' %}
         <div class="dropdown">
             <button class="btn-btn-secondary-dropdown-toggle" type="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -30,25 +30,24 @@
             </button>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">Perfil</a></li>
-                <li><a class="dropdown-item" href="#">Grade de Horarios</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('cadastrarServicos') }}">Servicos Prestados</a></li>
                 <li><a class="dropdown-item" href="{{ url_for('reservasBarbeiro') }}">Agendamentos</a></li>
             </ul>
         </div>
         <a href="{{ url_for('logout') }}">Sair</a>
 
-        {% elif barbeiro == 0 %}
+        {% elif current_user.barbeiro == '0' %}
         <div class="dropdown">
             <button class="btn-btn-secondary-dropdown-toggle" type="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 Serviços
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Corte masculino</a></li>
-                <li><a class="dropdown-item" href="#">Corte feminino</a></li>
-                <li><a class="dropdown-item" href="#">Barba</a></li>
-                <li><a class="dropdown-item" href="#">Pintura</a></li>
-                <li><a class="dropdown-item" href="#">Sobrancelha</a></li>
-                <li><a class="dropdown-item" href="#">Alisamento</a></li>
+                {% for servico in servicos %}
+                <li><a class="dropdown-item"
+                        href="{{ url_for('servico_escolhido', nome_servico=servico.nomeServico) }}">{{
+                        servico.nomeServico }}</a></li>
+                {% endfor %}
             </ul>
         </div>
         <a href="{{ url_for('reservasCliente') }}">Reservas</a>
@@ -62,15 +61,14 @@
                 Serviços
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Corte masculino</a></li>
-                <li><a class="dropdown-item" href="#">Corte feminino</a></li>
-                <li><a class="dropdown-item" href="#">Barba</a></li>
-                <li><a class="dropdown-item" href="#">Pintura</a></li>
-                <li><a class="dropdown-item" href="#">Sobrancelha</a></li>
-                <li><a class="dropdown-item" href="#">Alisamento</a></li>
+                {% for servico in servicos %}
+                <li><a class="dropdown-item"
+                        href="{{ url_for('servico_escolhido', nome_servico=servico.nomeServico) }}">{{
+                        servico.nomeServico }}</a></li>
+                {% endfor %}
             </ul>
         </div>
-        <a href="{{ url_for('logout') }}">Sair</a>
+        <a href="{{ url_for('login') }}">Entrar</a>
         {% endif %}
 
     </div>
