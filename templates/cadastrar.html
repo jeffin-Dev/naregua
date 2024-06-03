@@ -42,6 +42,15 @@
         <form action="/coletar-cadastro" method="post">
             <div class="card">
                 <h1 class="create">Vamos criar sua conta</h1>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alertt-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
                 <div class="form-container">
                     <input id="nomeCompleto" name="nomeCompleto" class="inpt" placeholder="Nome Completo"
                         type="text"><br>
@@ -49,17 +58,80 @@
                     <input id="telefone" name="telefone" class="inpt" id="phone" placeholder="Telefone" type="text"
                         oninput="formatPhoneNumber(this)"><br>
                     <input id="email" name="email" class="inpt" placeholder="Email" type="text"><br>
-                    <input id="senha" name="senha1" class="inpt" placeholder="Senha" type="password"><br>
-                    <input id="confirmarSenha" name="senha2" class="inpt" placeholder="Confirmar Senha"
-                        type="password"><br>
+                    <br>
+                    <strong><p>Você é barbeiro ou tem barbearia?</p></strong>
+                    <!-- Opção "Sim" -->
+                    <label>
+                        <input type="radio" name="tem_barbearia" value="sim" onclick="mostraropcoes('sim')">
+                        Sim
+                    </label>
+                    <!-- Opção "Não" -->
+                    <label>
+                        <input type="radio" name="tem_barbearia" value="nao" onclick="mostraropcoes('nao')">
+                        Não
+                    </label>
+                    
+                    <div>
+                        <!-- Caso a pessoa clique em "Não" -->
+                        <div id="horario_nao" class="horario" style="display: none;">
+                            <br>
+                            <input id="senha" name="senhaCliente1" class="inpt" placeholder="Senha" type="password"><br>
+                            <input id="confirmarSenha" name="senhaCliente2" class="inpt" placeholder="Confirmar Senha"
+                                type="password"><br>
+                            <br>
+                            <input id="btn_barbeiro" class="btn-cadastrar-conta" type="submit" value="Cadastrar"
+                                style="display: none;">
+                        </div>
+                    </div>
+
+                    <!-- Campo para o nome da barbearia -->
+                    <div class="centered">
+                        <br>
+                        <input id="nomeBarbearia" name="nomeBarbearia" class="inpt" placeholder="Nome da Barbearia" type="text"
+                            style="display: none;"><br>
+                        <input id="telefoneBarbearia" name="telefone" class="inpt" placeholder="Telefone da barbearia"
+                            type="text" style="display: none;"><br>
+                        <h5 id= "labelBarberDisp" style=" display: none; text-align: center;">Barbeiros disponíveis:</h5>
+                        
+                        <input id="inputBarberDisp" type="number" id="numero" name="qtdBarbeiros" style="display: none; width: 45px;">
+                        <br>
+        
+                        <h4 id="titulo" style="color: cadetblue; display: none;">Onde você se encontra?</h4>
+        
+                        <!-- Campo para endereço -->
+                        <input id="rua" name="rua" class="inpt" placeholder="Rua" type="text" style="display: none;">
+                        <input id="bairro" name="bairro" class="inpt" placeholder="Número" type="text" style="display: none;">
+                        <input id="numero" name="numero" class="inpt" placeholder="Bairro" type="text" style="display: none;">
+                        <input id="cep" name="cep" class="inpt" placeholder="CEP" type="text" style="display: none;">
+                        <input id="cidade" name="cidade" class="inpt" placeholder="Cidade" type="text" style="display: none;">
+                        <input id="estado" name="estado" class="inpt" placeholder="Estado" type="text" style="display: none;">
+        
+                        <!-- Campo para horario inicial e final  -->
+                        <div id="horario_sim" class="horario" style="display: none;">
+                            <label for="horario_abertura_sim">Horário de Abertura:</label><br>
+                            <input type="time" id="horario_abertura_sim" name="horario_abertura_sim" lang="pt-BR"
+                                step="3600"><br><br>
+                            <label for="horario_fechamento_sim">Horário de Fechamento:</label><br>
+                            <input type="time" id="horario_fechamento_sim" name="horario_fechamento_sim" lang="pt-BR"
+                                step="3600"><br>
+                            <br>
+                            <input id="senha" name="senha1" class="inpt" placeholder="Senha" type="password"><br>
+                            <input id="confirmarSenha" name="senha2" class="inpt" placeholder="Confirmar Senha"
+                                type="password"><br>
+                        </div>
+                        <br>
+                        <input id="btn_barbearia" class="btn-cadastrar-barber" type="submit" value="Cadastrar barbearia"
+                            style="display: none;">
+                    </div>
+        
                 </div>
-                <input id="btn" class="btn-cadastrar-conta" type="submit" value="Cadastrar">
             </div>
         </form>
     </div>
 </main>
 
 <script src="../static/cadastrarCliente/formatarStrings.js"></script>
+<script src="../static/cadastrarBarbeiro/cadastrarBarbeiro.js"></script>
 <script src="../static/homepage/homepage.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

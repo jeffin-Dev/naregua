@@ -30,9 +30,6 @@
     <body>
         {% include 'navbar.html' %}
 
-        {% block navbar %}
-
-        {% endblock %}
         <div class="mt-5">
             <h1>Minhas Reservas</h1>
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -47,13 +44,26 @@
             <div class="row">
                 {% for agenda in agendas %}
                 <div class="card">
-
-                    <p>Barbearia: {{ agenda.preco_servico_fk.barbearia.nomeBarbearia }}</p>
-                    <p> Serviço: {{ agenda.preco_servico_fk.servico.nomeServico }} </p>
-                    <p> Data: {{ agenda.dataAtendimento.strftime('%d/%m/%Y') }}</p>
-                    <p> Horário: {{ agenda.horarioAtendimento.strftime('%H:%M') }}</p>
-                    <p> Status: {{ agenda.status_fk.descricao }}</p>
-                    <p>Valor: {{ agenda.preco_servico_fk.PrecoServico }}</p>
+                    <div class="dropdown-container">
+                        <button class="dropdown">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2354/2354554.png" alt="Ícone de três pontos" width="35" height="30">
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="{{ url_for('cancelarAgendamento', idReserva=agenda.idReserva) }}" style="text-decoration: none; color: red;"><p>Cancelar Agendamento</p></a>
+                        </div>
+                    </div>
+                    <p><strong>Barbearia:</strong> {{ agenda.preco_servico.barbearia.nomeBarbearia }}</p>
+                    <p><strong>Serviço:</strong> {{ agenda.preco_servico.servico.nomeServico }}</p>
+                    <p><strong>Data:</strong> {{ agenda.dataAtendimento.strftime('%d/%m/%Y') }}</p>
+                    <p><strong>Horário:</strong> {{ agenda.horarioAtendimento.strftime('%H:%M') }}</p>
+                    
+                    {% if agenda.idStatus == 2 %}
+                    <p><strong>Status:</strong><span style="color: red;"> {{ agenda.status.descricao }}</span></p>
+                    {% else %}
+                    <p><strong>Status:</strong><span style="color: green;"> {{ agenda.status.descricao }}</span></p>
+                    {% endif %}
+                
+                    <p><strong>Valor:</strong> {{ agenda.preco_servico.PrecoServico }}</p>
                 </div>
                 {% endfor %}
             </div>

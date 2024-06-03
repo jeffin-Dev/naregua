@@ -290,20 +290,29 @@ body {
 }
 
 
-.alert-error {
-    color: red;
-    margin-bottom: 10px; 
-    background-color:#ffcccc; 
-    border-radius: 5px; 
-    padding: 10px; 
-    font-weight: bold;
+.dropdown-container {
+    position: relative;
+    display: inline-flex; /* Use display: inline-flex para alinhar os elementos lado a lado */
+    justify-content: flex-end; /* Alinha os itens ao final do container */
+    width: 100%; /* Garante que o container abrange toda a largura da div pai */
 }
 
-.alert-success {
-    color: green;
-    margin-bottom: 10px; 
-    background-color: rgb(156, 238, 156); 
-    border-radius: 5px; 
-    padding: 10px; 
-    font-weight: bold;
+.dropdown {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0; /* Alinha o dropdown à direita */
+}
+
+.dropdown-container:hover .dropdown-content {
+    display: block;
 }

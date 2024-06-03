@@ -256,20 +256,39 @@ body {
 }
 
 .alert-error {
-    color: rgb(0, 0, 0);
+    color: red;
     margin-bottom: 10px; 
-    background-color: rgb(219, 169, 169); 
     border-radius: 5px; 
-    padding: 10px; 
     font-weight: bold;
-    text-align: center;
+    font-size: 22px;
+    margin-top: 20px;
 }
 
 .alert-success {
     color: green;
     margin-bottom: 10px; 
-    background-color: rgb(156, 238, 156); 
+    margin-top: 50px;
     border-radius: 5px; 
-    padding: 10px; 
     font-weight: bold;
+    text-align: center;
+    font-size: 18px;
+}
+
+.alert-descricao {
+    margin-bottom: 10px; 
+    border-radius: 5px; 
+
+    font-weight: bold;
+    font-size: 18px;
+    color: rgb(51, 106, 184);
+
+}
+
+.alert-servico{
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    margin-top: 45px;
 }

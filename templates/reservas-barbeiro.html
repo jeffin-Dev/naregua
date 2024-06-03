@@ -37,14 +37,20 @@
             <div class="row">
                 {% for agenda in agendas %}
                 <div class="card col-6">
-                    <h4>Cliente: {{ agenda.usuario_fk.nomeUsuario }}</h4>
-                    <p><strong>Serviço:</strong> {{ agenda.preco_servico_fk.servico.nomeServico }}</p>
-                    <p><strong>Valor do serviço:</strong> {{ agenda.preco_servico_fk.PrecoServico }}</p>
+                    <h4>Cliente: {{ agenda.usuario.nomeUsuario }}</h4>
+                    <p><strong>Serviço:</strong> {{ agenda.preco_servico.servico.nomeServico }}</p>
+                    <p><strong>Valor do serviço:</strong> {{ agenda.preco_servico.PrecoServico }}</p>
                     <p><strong>Data:</strong> {{ agenda.dataAtendimento.strftime('%d/%m/%Y') }}</p>
                     <p><strong>Horário:</strong> {{ agenda.horarioAtendimento.strftime('%H:%M') }}</p>
-                    <p><strong>Status:</strong> {{ agenda.status_fk.descricao }}</p>
-                    <p><strong>Telefone para contato:</strong> {{ agenda.usuario_fk.telefone }}</p>
-                    <p><strong>Email para contato:</strong> {{ agenda.usuario_fk.email  }} </p>
+                    
+                    {% if agenda.idStatus == 2 %}
+                    <p><strong>Status:<span style="color: red;">{{ agenda.status.descricao }}</span></strong></p>
+                    {% else %}
+                    <p><strong>Status:<span style="color: green;">{{ agenda.status.descricao }}</span></strong></p>
+                    {% endif %}
+
+                    <p><strong>Telefone para contato:</strong> {{ agenda.usuario.telefone }}</p>
+                    <p><strong>Email para contato:</strong> {{ agenda.usuario.email  }} </p>
                 </div>
                 {% endfor %}
             </div>

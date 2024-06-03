@@ -1,17 +1,20 @@
-.form-control{
-    width: 150px;
+
+
+
+.alertt-error {
+    color: red;
+    margin-bottom: 10px; 
+    background-color:#ffcccc; 
+    border-radius: 5px; 
+    padding: 10px; 
+    font-weight: bold;
 }
 
-#reservas-container-1 {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-
-#reservas-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+.alertt-success {
+    color: green;
+    margin-bottom: 10px; 
+    background-color: rgb(156, 238, 156); 
+    border-radius: 5px; 
+    padding: 10px; 
+    font-weight: bold;
 }

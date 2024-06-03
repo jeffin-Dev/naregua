@@ -12,6 +12,8 @@ function mostraropcoes(opcao) {
     var btn_barbeiro = document.getElementById("btn_barbeiro");
     var btn_barbearia = document.getElementById("btn_barbearia");
     var telefoneBarbearia = document.getElementById("telefoneBarbearia");
+    var labelBarberDisp = document.getElementById("labelBarberDisp");
+    var inputBarberDisp = document.getElementById("inputBarberDisp");
     var cep = document.getElementById("cep");
 
     if (opcao === "sim") {
@@ -25,9 +27,12 @@ function mostraropcoes(opcao) {
         titulosim.style.display = "block";
         btn_barbearia.style.display = "block";
         telefoneBarbearia.style.display = "block";
+        inputBarberDisp.style.display = "block";
+        labelBarberDisp.style.display = "block";
         cep.style.display = "block";
         btn_barbeiro.style.display = "none";
         horarioNao.style.display = "none"
+
 
     } else {
 
@@ -40,6 +45,8 @@ function mostraropcoes(opcao) {
         estado.style.display = "none";
         titulosim.style.display = "none";
         telefoneBarbearia.style.display = "none";
+        inputBarberDisp.style.display = "none";
+        labelBarberDisp.style.display = "none";
         btn_barbearia.style.display = "none";
         cep.style.display = "none";
         btn_barbeiro.style.display = "block";

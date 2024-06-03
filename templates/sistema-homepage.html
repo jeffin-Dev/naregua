@@ -20,7 +20,6 @@
     <main>
         <section class="barbers">
             <div class="container">
-                <h2>Barbeiros Disponíveis</h2>
                 {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                 {% for category, message in messages %}
@@ -31,8 +30,11 @@
                 {% endif %}
                 {% endwith %}
                 <div class="row">
+                    
+                    <h2 style="padding: 10px;">Barbearias disponíveis:</h2>
+
                     {% for barbearia, valor_servico, id_servico in barbearias_valores %}
-                    <div class="col-md-4">
+                    <div class="col-md-4" style="padding: 10px; ">
                         <div class="card">
                             <div class="card-header">
                                 <h2>{{ barbearia.nomeBarbearia }}</h2>

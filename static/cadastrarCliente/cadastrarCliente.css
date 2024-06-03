@@ -51,7 +51,6 @@ nav ul li a {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
 }
 
 .card {
@@ -80,7 +79,8 @@ nav ul li a {
     padding-left: 10px;
 }
 
-.btn-cadastrar-conta {
+.btn-cadastrar-conta,
+.btn-cadastrar-barber {
     width: 100%;
     height: 40px;
     border-radius: 5px;
@@ -90,7 +90,8 @@ nav ul li a {
     color: white;
 }
 
-.btn-cadastrar-conta:hover {
+.btn-cadastrar-conta:hover,
+.btn-cadastrar-barber:hover {
     background-color: #0056b3;
 }
 
@@ -98,4 +99,13 @@ nav ul li a {
     .company-name{
         display: none;
     }
+}
+
+.alertt-error {
+    color: red;
+    margin-bottom: 10px; 
+    background-color:#e5d9d9; 
+    border-radius: 5px; 
+    padding: 10px; 
+    font-weight: bold;
 }

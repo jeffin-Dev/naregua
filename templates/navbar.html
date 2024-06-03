@@ -21,7 +21,19 @@
             </svg>
         </button>
         <a href="{{ url_for('barber') }}">Inicio</a>
-
+        <div class="dropdown">
+            <button class="btn-btn-secondary-dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Serviços
+            </button>
+            <ul class="dropdown-menu">
+                {% for servico in servicos %}
+                <li><a class="dropdown-item"
+                        href="{{ url_for('servico_escolhido', nome_servico=servico.nomeServico) }}">{{
+                        servico.nomeServico }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
         {% if current_user.barbeiro == '1' %}
         <div class="dropdown">
             <button class="btn-btn-secondary-dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -37,37 +49,10 @@
         <a href="{{ url_for('logout') }}">Sair</a>
 
         {% elif current_user.barbeiro == '0' %}
-        <div class="dropdown">
-            <button class="btn-btn-secondary-dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Serviços
-            </button>
-            <ul class="dropdown-menu">
-                {% for servico in servicos %}
-                <li><a class="dropdown-item"
-                        href="{{ url_for('servico_escolhido', nome_servico=servico.nomeServico) }}">{{
-                        servico.nomeServico }}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
         <a href="{{ url_for('reservasCliente') }}">Reservas</a>
-        <a href="{{ url_for('cadastrar_barbeiro') }}">Sou barbeiro</a>
         <a href="{{ url_for('logout') }}">Sair</a>
 
         {% else %}
-        <div class="dropdown">
-            <button class="btn-btn-secondary-dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Serviços
-            </button>
-            <ul class="dropdown-menu">
-                {% for servico in servicos %}
-                <li><a class="dropdown-item"
-                        href="{{ url_for('servico_escolhido', nome_servico=servico.nomeServico) }}">{{
-                        servico.nomeServico }}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
         <a href="{{ url_for('login') }}">Entrar</a>
         {% endif %}
 

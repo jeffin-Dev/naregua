@@ -99,3 +99,13 @@ nav ul li a {
         display: none;
     }
 }
+
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+.centered input {
+    margin: 0.5em 0;
+}

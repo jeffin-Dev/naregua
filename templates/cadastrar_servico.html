@@ -20,6 +20,14 @@
 
         <div class="containerBody">
             <h1>Serviços e Valores</h1>
+            <br>
+            <h5> <strong>
+                    No campo de duração, é necessário que coloque os MINUTOS da duração do serviço. </strong></h5>
+            <h5> <strong>
+            Caso haja necessidade de colocar em horas, siga o exemplo a seguir:
+            1:30 (uma hora e trinta minutos).
+            </strong></h5>
+            <br>
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             {% for category, message in messages %}
@@ -32,13 +40,22 @@
             <form action="/coletar-servicos-barbeiro" method="post">
                 {% for servico in servicos %}
                 <div class="servico">
-                    <input class="checkbox" name="servico_valor" value="{{ servico.idServico }}" type="checkbox" id="servico{{ servico.idServico }}">
+                    <input class="checkbox" name="servico_valor" value="{{ servico.idServico }}" type="checkbox"
+                        id="servico{{ servico.idServico }}">
                     <label for="servico{{ servico.idServico }}">{{ servico.nomeServico }}</label>
                     <input type="text" name="valorServico_{{ servico.idServico }}" placeholder="Valor">
+                    <br>
+                    <label for="">Tempo do Serviço: </label>
+                    <input style="width: 70px;" type="text" name="duracao_{{ servico.idServico }}"
+                        placeholder="Duração">
+                    <br>
+                    <label> <strong>Obs: {{ servico.descricao }}</strong></label>
                 </div>
                 <br>
                 {% endfor %}
-                <input class="btnA" type="submit" value="Cadastrar Serviços"></input>
+                <div style="text-align: center;">
+                    <input class="btnA" type="submit" value="Cadastrar Serviços"></input>
+                </div>
             </form>
         </div>
     </div>
