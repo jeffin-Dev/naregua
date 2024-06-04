@@ -12,6 +12,17 @@
 <body>
     <div class="container">
         <h2>Verificação de E-mail</h2>
+        <div class="flash-message">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
         <form action="/coletar_token" method="post">
             <div class="form-container">
                 <div class="tokens-container">
@@ -21,17 +32,6 @@
                     <input type="text" id="token4" name="token4" maxlength="1" class="token" required>
                     <input type="text" id="token5" name="token5" maxlength="1" class="token" required>
                     <input type="text" id="token6" name="token6" maxlength="1" class="token" required>
-                </div>
-                <div class="flash-message">
-                    {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                    {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-                    {% endwith %}
                 </div>
                 <input id="btn" class="btn" type="submit" value="Verificar">
             </div>

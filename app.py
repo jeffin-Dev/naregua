@@ -2,6 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, request, jso
 from model import db, Usuario, Agenda, Barbearia, PrecoServico, Servico, init_db
 from flask_login import LoginManager, login_user, UserMixin, login_required, current_user, logout_user
 from scripts.scripts import calcular_horarios_disponiveis, calcular_horarios_indisponiveis, converter_duracao_para_minutos, enviar_email_recuperar_senha
+from scripts.geolocalizacao import find_nearby_establishments
 import random as rd
 from datetime import datetime
 
@@ -184,7 +185,7 @@ senha: {senha_cliente1, senha_barbearia1}
         if temBarbearia == 'sim':
             
             # Constrói o endereço completo
-            endereco = f'{rua}, {numeroEndereco} - {bairro}, CEP: {cep} - {cidade}, {estado}'
+            endereco = f'{rua},{numeroEndereco},{bairro},{cep},{cidade}, {estado}'
             
             # Cria uma nova instância de 'Barbearia' com os dados coletados
             novoBarbeiro = Barbearia(nomeBarbearia=nomeBarbearia, telefone=telefoneBarbearia, endereco=endereco, qtdBarbeiros = qtdBarbeiros, horaInicio=horaInicio, horaFim=horaFim)
@@ -258,12 +259,13 @@ def coletar_email_recuperar():
         flash('Usuário não cadastrado.', 'error')
         return redirect(url_for('esq_senha'))
         
-
 #Essa função apenas renderiza o template token_de_acesso.html. 
 #Essa rota recebe como parametro a variavel codCliente, que é um codigo de segurança passado na url,
 #Exemplo: www.recuperar.com/token/<123456>.
 @app.route('/token/<codCliente>')
 def token_acess(codCliente):
+    print(codigo)
+    flash("Te enviamos um código por e-mail. Descreva-o abaixo.", 'sucess')
     return render_template('token_de_acesso.html')
 
 # Essa rota recebe como método POST os token's informados pelo usuario no formulario da pagina do template
@@ -336,9 +338,36 @@ def barber():
         barbeiro = int(current_user.barbeiro)
         print(barbeiro, type(barbeiro))  # Imprime o valor e o tipo de 'barbeiro' para depuração
         # Renderiza o template 'sistema-homepage.html', passando o valor de 'barbeiro' e a lista de todos os serviços
-        return render_template('sistema-homepage.html', barbeiro=barbeiro, servicos=Servico.query.all())
+        barbearias = Barbearia.query.all()
+        print(barbearias)
+
+        lista_barbearias_proximas = []
+        try:
+            usuario = Usuario.query.filter_by(idUsuario=current_user.idUsuario).first()
+            if usuario is None:
+                raise ValueError("Usuário não encontrado no banco de dados")
+
+            print('Endereço do clinte:', usuario.endereco)
+            for barbearia in barbearias:
+
+                barbearias_dentro_de_5_km = find_nearby_establishments(usuario.endereco, [barbearia.endereco])
+
+
+                print("Estabelecimentos próximos:")
+                for establishment in barbearias_dentro_de_5_km:
+                    lista_barbearias_proximas.extend(Barbearia.query.filter_by(endereco=establishment['address']))
+                    print(f"Endereço: {establishment['address']} - Distância: {establishment['distance_km']:.2f} km")
+
+
+        except Exception as e:
+            print(e)
+            flash('Ocorreu um erro ao encontrar barbearias próximas.', 'error')
+
+        return render_template('sistema-homepage.html', barbeiro=barbeiro, servicos=Servico.query.all(), lista_barbearias_proximas=lista_barbearias_proximas)
+    
     else:
         # Renderiza o template 'sistema-homepage.html', passando apenas a lista de todos os serviços
+        flash('Faça o login ou crie sua conta para acessar as barbearias de sua região.', 'error')
         return render_template('sistema-homepage.html', servicos=Servico.query.all())
 
 
@@ -445,17 +474,39 @@ def horarios_disponiveis_js():
     duracoes_agendadas = []
     horarios_agendados = []
     
-    #Verifica se o status do agendamento não é cancelado.
-    for agenda in agendas:
+    # Inicializa um dicionário para contar quantos agendamentos existem para cada horário
+    horario_count = {}
+    
+    # Itera sobre todas as agendas obtidas para a data selecionada
+    for agenda in agendas: 
+        # Verifica se o status do agendamento é igual a 1 (ativo/não cancelado)
         if agenda.idStatus == 1:
-            horarios_agendados = [agenda.horarioAtendimento.strftime('%H:%M')]
-            duracoes_agendadas = [converter_duracao_para_minutos(PrecoServico.query.filter_by(idPrecoServico=agenda.idPrecoServico).first().duracao)]
-            # Calcular os horários disponíveis com base nas informações da barbearia e nos horários já agendados
+            # Formata o horário do agendamento como uma string no formato 'HH:MM'
+            horario = agenda.horarioAtendimento.strftime('%H:%M')
+            
+            # Se o horário ainda não está no dicionário 'horario_count', inicializa com 0
+            if horario not in horario_count:
+                horario_count[horario] = 0
+            
+            # Incrementa a contagem de agendamentos para o horário atual
+            horario_count[horario] += 1
+            
+            # Se o número de agendamentos para o horário atual for igual ao número de barbeiros disponíveis
+            if horario_count[horario] == int(barbearia.qtdBarbeiros):
+                # Adiciona o horário à lista de horários agendados
+                horarios_agendados.append(horario)
+                
+                # Converte a duração do serviço agendado para minutos
+                duracao_agendada = converter_duracao_para_minutos(PrecoServico.query.filter_by(idPrecoServico=agenda.idPrecoServico).first().duracao)
+                
+                # Adiciona a duração do serviço agendado à lista de durações agendadas
+                duracoes_agendadas.append(duracao_agendada)
+
+    # Calcular os horários disponíveis com base nas informações da barbearia e nos horários já agendados
     horarios_disponiveis = calcular_horarios_disponiveis(barbearia.horaInicio, barbearia.horaFim, duracao, horarios_agendados, duracoes_agendadas)
 
     # Retornar os horários disponíveis em formato JSON
     return jsonify(horarios_disponiveis)
-
 
 # Define a rota '/coletar-agendamento/<int:id_servico>' para a função 'coletar_agendamento' usando o método POST
 @app.route('/coletar-agendamento/<int:id_servico>', methods=['POST'])
@@ -595,12 +646,14 @@ def coletarServicosBarbeiro():
             # Adiciona o novo preço de serviço à sessão do banco de dados e confirma a transação
             db.session.add(preco_servico_barbeiro)
             db.session.commit()
-            flash('Serviços cadastrados com sucesso!', 'success')
+            
         else:
             # Se algum serviço não tiver valor, exibe uma mensagem de erro e redireciona
             flash('Coloque valor e a duração em todos os serviços selecionados.', 'error')
             return redirect(url_for('cadastrarServicos'))
-        
+    if valor:
+        flash('Serviços cadastrados com sucesso!', 'success') 
+       
     # Printar os serviços e valores (não necessário para a funcionalidade, mas útil para depuração)
     for servico, valor in servico_valor_pairs:
         print(f'Serviço: {servico}, Valor: {valor}')
@@ -619,4 +672,4 @@ def logout():
 
 
 if "__main__" == __name__:
-    app.run(debug = True, host= '192.168.0.113')
+    app.run(debug = True)

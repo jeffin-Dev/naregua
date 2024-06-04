@@ -16,6 +16,7 @@ class Usuario(db.Model):
     nomeUsuario = db.Column(db.String(100))  # Coluna para armazenar o nome do usuário
     cpf = db.Column(db.String(15), unique=True)  # Coluna para armazenar o CPF do usuário, também usado como chave primária
     telefone = db.Column(db.String(20))  # Coluna para armazenar o telefone do usuário
+    endereco = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(45))  # Coluna para armazenar o email do usuário
     senha = db.Column(db.String(12))  # Coluna para armazenar a senha do usuário
     barbeiro = db.Column(db.String(1), default='0')  # Coluna para indicar se o usuário é barbeiro (0 ou 1)

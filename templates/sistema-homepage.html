@@ -31,8 +31,29 @@
                 {% endwith %}
                 <div class="row">
                     
-                    <h2 style="padding: 10px;">Barbearias disponíveis:</h2>
+                    <h2 style="padding: 10px;">Barbearias disponíveis próximo de você:</h2>
+                    {% for barbearia_proximas in lista_barbearias_proximas %}
 
+                    <div class="col-md-4" style="padding: 10px; ">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>{{ barbearia_proximas.nomeBarbearia }}</h2>
+
+                                <p><strong></strong>{{ barbearia_proximas.endereco }}</p>
+                                <p><strong>Barbeiros disponíveis:</strong>{{ barbearia_proximas.qtdBarbeiros }}</p>
+                                <p><strong>Horario de abertura e fechamento:</strong>{{ barbearia_proximas.horaInicio }} - {{ barbearia_proximas.horaFim }}</p>
+                                <p><strong>Telefone Barbearia:</strong>{{ barbearia_proximas.telefone }}</p>
+
+                            </div>
+                            <div class="card-footer">
+                                <a href="{{ url_for('agendamento', nome_barbearia=barbearia_proximas.nomeBarbearia, id_servico=id_servico) }}">
+                                    <button class="btn-agendar">Agendar</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
                     {% for barbearia, valor_servico, id_servico in barbearias_valores %}
                     <div class="col-md-4" style="padding: 10px; ">
                         <div class="card">

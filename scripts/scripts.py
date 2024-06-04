@@ -15,7 +15,7 @@ Código de acesso: {codigo}
     msg = EmailMessage()
     
     # Define o assunto do email
-    msg['Subject'] = "Código de Segurando Ná Regua"
+    msg['Subject'] = "Código de Segurança para troca de senha Ná Regua"
     
     # Define o remetente do email
     msg['From'] = 'jeffinhogamer2014@gmail.com'
@@ -66,6 +66,7 @@ def calcular_horarios_indisponiveis(horarios_agendados, duracoes_agendadas):
                 horario_inicio += timedelta(minutes=1)  # Avança minuto a minuto
     return horarios_indisponiveis
 
+
 def verificar_disponibilidade(horario_desejado, duracao_desejada, horarios_indisponiveis):
     """
     Verifica se o horário desejado está disponível para o agendamento.
@@ -79,6 +80,7 @@ def verificar_disponibilidade(horario_desejado, duracao_desejada, horarios_indis
         horario_inicio += timedelta(minutes=1)  # Verifica a cada minuto
     
     return True
+
 
 def calcular_horarios_disponiveis(horaInicio, horaFim, duracao, horarios_agendados=None, duracoes_agendadas=None):
     """
@@ -113,6 +115,7 @@ def calcular_horarios_disponiveis(horaInicio, horaFim, duracao, horarios_agendad
         hoje += timedelta(minutes=duracao)
         
     return horarios_disponiveis
+
 
 # Função para adicionar um novo serviço, se possível
 def adicionar_servico(horario_desejado, duracao_desejada, horarios_agendados, duracoes_agendadas):

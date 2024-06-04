@@ -73,3 +73,13 @@ h2 {
     font-weight: bold;
     margin-top: 25px;
 }
+
+.alert-sucess {
+    color: green;
+    border-radius: 5px; 
+    padding: 10px; 
+    font-weight: bold;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
