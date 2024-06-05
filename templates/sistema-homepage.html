@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,6 +19,7 @@
     <main>
         <section class="barbers">
             <div class="container">
+
                 {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                 {% for category, message in messages %}
@@ -30,10 +30,11 @@
                 {% endif %}
                 {% endwith %}
                 <div class="row">
-                    
+                    <br><br>
+                    <br>
+                    <h5>Endereço: {{ enderecoCliente }}</h5>
                     <h2 style="padding: 10px;">Barbearias disponíveis próximo de você:</h2>
                     {% for barbearia_proximas in lista_barbearias_proximas %}
-
                     <div class="col-md-4" style="padding: 10px; ">
                         <div class="card">
                             <div class="card-header">
@@ -41,19 +42,21 @@
 
                                 <p><strong></strong>{{ barbearia_proximas.endereco }}</p>
                                 <p><strong>Barbeiros disponíveis:</strong>{{ barbearia_proximas.qtdBarbeiros }}</p>
-                                <p><strong>Horario de abertura e fechamento:</strong>{{ barbearia_proximas.horaInicio }} - {{ barbearia_proximas.horaFim }}</p>
+                                <p><strong>Horario de abertura e fechamento:</strong>{{ barbearia_proximas.horaInicio }} -
+                                    {{ barbearia_proximas.horaFim }}</p>
                                 <p><strong>Telefone Barbearia:</strong>{{ barbearia_proximas.telefone }}</p>
 
                             </div>
                             <div class="card-footer">
-                                <a href="{{ url_for('agendamento', nome_barbearia=barbearia_proximas.nomeBarbearia, id_servico=id_servico) }}">
-                                    <button class="btn-agendar">Agendar</button>
+                                <a
+                                    href="{{ url_for('agendamento', nome_barbearia=barbearia_proximas.nomeBarbearia, id_servico=id_servico) }}">
+                                    <button class="btn-agendar">Perfil</button>
                                 </a>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
-                    
+
                     {% for barbearia, valor_servico, id_servico in barbearias_valores %}
                     <div class="col-md-4" style="padding: 10px; ">
                         <div class="card">
@@ -62,10 +65,11 @@
                                 <p>{{ nome_servico }}</p>
                             </div>
                             <div class="card-body">
-                                <p>Valor do Serviço: R${{ valor_servico }}</p>  <!-- Acessa o valor do serviço -->
+                                <p>Valor do Serviço: R${{ valor_servico }}</p> <!-- Acessa o valor do serviço -->
                             </div>
                             <div class="card-footer">
-                                <a href="{{ url_for('agendamento', nome_barbearia=barbearia.nomeBarbearia, id_servico=id_servico) }}">
+                                <a
+                                    href="{{ url_for('agendamento', nome_barbearia=barbearia.nomeBarbearia, id_servico=id_servico) }}">
                                     <button class="btn-agendar">Agendar</button>
                                 </a>
                             </div>
@@ -86,6 +90,18 @@
         </div>
     </footer>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loading = document.getElementById('loading');
+            const content = document.getElementById('content');
+
+            // Oculta o widget de carregamento e mostra o conteúdo
+            window.addEventListener('load', function () {
+                loading.style.display = 'none';
+                content.style.display = 'block';
+            });
+        });
+    </script>
     <script src="../static/homepage/homepage.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

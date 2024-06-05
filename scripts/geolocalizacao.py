@@ -14,9 +14,9 @@ def get_coordinates(address):
         return None
 
 # Função para encontrar estabelecimentos próximos a partir de uma lista de endereços
-def find_nearby_establishments(user_address, establishment_addresses, radius_km=5.0):
+def find_nearby_establishments(user_address, establishment_addresses, radius_km=2.0):
     user_location = get_coordinates(user_address)
-     
+    print(user_location)
     if user_location is None:
         print("Endereço do usuário não encontrado")
         return []

@@ -13,13 +13,13 @@ class Usuario(db.Model):
     
     # Define as colunas da tabela 'usuario'
     idUsuario = db.Column(db.Integer, primary_key=True, autoincrement=True)  # Chave primária com incremento automático
-    nomeUsuario = db.Column(db.String(100))  # Coluna para armazenar o nome do usuário
+    nomeUsuario = db.Column(db.String(100), nullable=False)  # Coluna para armazenar o nome do usuário
     cpf = db.Column(db.String(15), unique=True)  # Coluna para armazenar o CPF do usuário, também usado como chave primária
-    telefone = db.Column(db.String(20))  # Coluna para armazenar o telefone do usuário
-    endereco = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(45))  # Coluna para armazenar o email do usuário
-    senha = db.Column(db.String(12))  # Coluna para armazenar a senha do usuário
-    barbeiro = db.Column(db.String(1), default='0')  # Coluna para indicar se o usuário é barbeiro (0 ou 1)
+    telefone = db.Column(db.String(20), nullable=False)  # Coluna para armazenar o telefone do usuário
+    enderecoCliente = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(45), nullable=False)  # Coluna para armazenar o email do usuário
+    senha = db.Column(db.String(12), nullable=False)  # Coluna para armazenar a senha do usuário
+    barbeiro = db.Column(db.String(1), default='0', nullable=False)  # Coluna para indicar se o usuário é barbeiro (0 ou 1)
     idBarbearia_fk = db.Column(db.Integer, db.ForeignKey('barbearia.idBarbearia'), nullable=False)  # Coluna para armazenar a referência à barbearia
     
     #Relacionamentos da tabela Usuario
