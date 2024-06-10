@@ -7,6 +7,7 @@ db = SQLAlchemy()
 def init_db(app):
     db.init_app(app)
 
+
 # Define a classe 'Usuario', que representa a tabela 'usuario' no banco de dados
 class Usuario(db.Model):
     __tablename__ = 'usuario'
@@ -16,7 +17,7 @@ class Usuario(db.Model):
     nomeUsuario = db.Column(db.String(100), nullable=False)  # Coluna para armazenar o nome do usuário
     cpf = db.Column(db.String(15), unique=True)  # Coluna para armazenar o CPF do usuário, também usado como chave primária
     telefone = db.Column(db.String(20), nullable=False)  # Coluna para armazenar o telefone do usuário
-    enderecoCliente = db.Column(db.String(255), nullable=False)
+    enderecoCliente = db.Column(db.String(255), nullable=False) #Coluna para armazenar o endereço do usuário
     email = db.Column(db.String(45), nullable=False)  # Coluna para armazenar o email do usuário
     senha = db.Column(db.String(12), nullable=False)  # Coluna para armazenar a senha do usuário
     barbeiro = db.Column(db.String(1), default='0', nullable=False)  # Coluna para indicar se o usuário é barbeiro (0 ou 1)
@@ -39,8 +40,6 @@ class Usuario(db.Model):
         return str(self.cpf)
 
 
-
-
 # Define a classe 'Barbearia', que representa a tabela 'barbearia' no banco de dados
 class Barbearia(db.Model):
     __tablename__ = 'barbearia'
@@ -48,12 +47,14 @@ class Barbearia(db.Model):
     # Define as colunas da tabela 'barbearia'
     idBarbearia = db.Column(db.Integer, primary_key=True, autoincrement=True)  # Chave primária com incremento automático
     nomeBarbearia = db.Column(db.String(45), nullable=False)  # Coluna para armazenar o nome da barbearia
-    endereco = db.Column(db.String(150), nullable=False)  # Coluna para armazenar o endereço da barbearia
+    enderecoBarbearia = db.Column(db.String(150), nullable=False)  # Coluna para armazenar o endereço da barbearia
     telefone = db.Column(db.String(20), nullable=False)  # Coluna para armazenar o telefone da barbearia
     qtdBarbeiros = db.Column(db.Integer, nullable=False) #Coluna para armazenar a quantidade de barbeiros disponíveis na barbearia
     horaInicio = db.Column(db.Time(), nullable=False)  # Coluna para armazenar a hora de início do funcionamento
     horaFim = db.Column(db.Time(), nullable=False)  # Coluna para armazenar a hora de fim do funcionamento
-
+    disponibilidade = db.Column(db.String(8), nullable=False) # Coluna para armazenar a disponibilidade da barbearia
+    
+    
     def get_id(self):
         # Lógica para pegar o ID da barbearia
         return str(self.idBarbearia)

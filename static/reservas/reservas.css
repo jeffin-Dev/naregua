@@ -81,7 +81,6 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 250;
     margin: 20px auto;
 }
 
@@ -315,4 +314,30 @@ body {
 
 .dropdown-container:hover .dropdown-content {
     display: block;
+}
+
+.alert-success {
+    color: rgb(0, 179, 0);
+    background-color: #e3ffed; 
+    margin-bottom: 10px; 
+    border-radius: 5px; 
+    padding: 10px; 
+    width: 500px;
+    text-align: center; /* Centraliza o texto dentro da div */
+}
+
+.alert-error {
+    color: red;
+    margin-bottom: 10px; 
+    background-color: #ffcccc; 
+    border-radius: 5px; 
+    padding: 10px; 
+    width: 500px;
+    text-align: center; /* Centraliza o texto dentro da div */
+}
+
+.msg-error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

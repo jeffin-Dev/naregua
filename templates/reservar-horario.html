@@ -12,13 +12,14 @@
 <form action="{{ url_for('coletar_agendamento', id_servico=id_servico) }}" method="POST">
     <div class="container mt-5">
         <br>
+        
         <div class="mt-4">
             <br>
             <h2>Agendar Reserva</h2>
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             {% for category, message in messages %}
-            <div class="alert-{{ category }}">
+            <div class="alert-{{category}}" style="color: red; font-size: 24px;">
                 {{ message }}
             </div>
             {% endfor %}

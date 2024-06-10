@@ -28,6 +28,7 @@
             1:30 (uma hora e trinta minutos).
             </strong></h5>
             <br>
+            
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             {% for category, message in messages %}
@@ -37,6 +38,7 @@
             {% endfor %}
             {% endif %}
             {% endwith %}
+
             <form action="/coletar-servicos-barbeiro" method="post">
                 {% for servico in servicos %}
                 <div class="servico">

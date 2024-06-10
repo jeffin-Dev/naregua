@@ -31,39 +31,54 @@
         {% include 'navbar.html' %}
 
         <div class="mt-5">
+            <br>
             <h1>Minhas Reservas</h1>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-            {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">
-                {{ message }}
+            <div class="msg-error">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
             </div>
-            {% endfor %}
-            {% endif %}
-            {% endwith %}
-            <div class="row">
+            <div class="row justify-content-center">
                 {% for agenda in agendas %}
-                <div class="card">
-                    <div class="dropdown-container">
-                        <button class="dropdown">
-                            <img src="https://cdn-icons-png.flaticon.com/512/2354/2354554.png" alt="Ícone de três pontos" width="35" height="30">
-                        </button>
-                        <div class="dropdown-content">
-                            <a href="{{ url_for('cancelarAgendamento', idReserva=agenda.idReserva) }}" style="text-decoration: none; color: red;"><p>Cancelar Agendamento</p></a>
+                <div class="col-lg-4 col-md-3 mb-4">
+                    <div class="card">
+                        <div class="dropdown-container">
+                            <button class="dropdown">
+                                <img src="https://cdn-icons-png.flaticon.com/512/2354/2354554.png"
+                                    alt="Ícone de três pontos" width="35" height="30">
+                            </button>
+                            <div class="dropdown-content">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#cancelModal"
+                                    data-url="{{ url_for('cancelarAgendamento', idReserva=agenda.idReserva) }}"
+                                    style="text-decoration: none; color: red;">
+                                    <p>Cancelar Agendamento</p>
+                                </a>
+                            </div>
                         </div>
+
+                        <p><strong>Barbearia:</strong> {{ agenda.preco_servico.barbearia.nomeBarbearia }}</p>
+                        <p><strong>Serviço:</strong> {{ agenda.preco_servico.servico.nomeServico }}</p>
+                        <p><strong>Data:</strong> {{ agenda.dataAtendimento.strftime('%d/%m/%Y') }}</p>
+                        <p><strong>Horário:</strong> {{ agenda.horarioAtendimento.strftime('%H:%M') }}</p>
+
+                        {% if agenda.idStatus == 2 %}
+                        <p><strong>Status:<span style="color: red;"> {{ agenda.status.descricao }}</span></strong></p>
+                        {% elif agenda.idStatus == 1 %}
+                        <p><strong>Status<span style="color: rgb(0, 34, 255);"> {{ agenda.status.descricao
+                                    }}</span></strong></p>
+                        {% elif agenda.idStatus == 3 %}
+                        <p><strong>Status<span style="color: green;"> {{ agenda.status.descricao }}</span></strong></p>
+                        {% endif %}
+
+                        <p><strong>Valor:</strong> {{ agenda.preco_servico.PrecoServico }}</p>
+                        <p><strong>Contato da Barbearia: <br> </strong>{{ agenda.preco_servico.barbearia.telefone }}</p>
                     </div>
-                    <p><strong>Barbearia:</strong> {{ agenda.preco_servico.barbearia.nomeBarbearia }}</p>
-                    <p><strong>Serviço:</strong> {{ agenda.preco_servico.servico.nomeServico }}</p>
-                    <p><strong>Data:</strong> {{ agenda.dataAtendimento.strftime('%d/%m/%Y') }}</p>
-                    <p><strong>Horário:</strong> {{ agenda.horarioAtendimento.strftime('%H:%M') }}</p>
-                    
-                    {% if agenda.idStatus == 2 %}
-                    <p><strong>Status:</strong><span style="color: red;"> {{ agenda.status.descricao }}</span></p>
-                    {% else %}
-                    <p><strong>Status:</strong><span style="color: green;"> {{ agenda.status.descricao }}</span></p>
-                    {% endif %}
-                
-                    <p><strong>Valor:</strong> {{ agenda.preco_servico.PrecoServico }}</p>
                 </div>
                 {% endfor %}
             </div>
@@ -73,6 +88,25 @@
                 integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
                 crossorigin="anonymous"></script>
             <script src="../static/homepage/homepage.js"></script>
+
+            <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cancelModalLabel">Confirmar Cancelamento</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Você realmente deseja cancelar o agendamento?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                            <button type="button" class="btn btn-danger" id="confirmCancelBtn">Sim</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </body>
 
 </html>

@@ -41,14 +41,15 @@
                 Minha Conta
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Perfil</a></li>
-                <li><a class="dropdown-item" href="{{ url_for('cadastrarServicos') }}">Servicos Prestados</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('perfil_barbearia', nome_barbearia = nome_barbearia)}}">Perfil</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('cadastrarServicos') }}">Serviços Prestados</a></li>
                 <li><a class="dropdown-item" href="{{ url_for('reservasBarbeiro') }}">Agendamentos</a></li>
             </ul>
         </div>
         <a href="{{ url_for('logout') }}">Sair</a>
 
         {% elif current_user.barbeiro == '0' %}
+        <a href="{{ url_for('perfil_usuario', nome_cliente = usuario ) }}">Perfil</a>
         <a href="{{ url_for('reservasCliente') }}">Reservas</a>
         <a href="{{ url_for('logout') }}">Sair</a>
 

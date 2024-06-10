@@ -33,31 +33,34 @@
     </header>
     <div class="container mt-5">
         <h1>Agendamentos</h1>
-        <div class="container">
-            <div class="row">
-                {% for agenda in agendas %}
-                <div class="card col-6">
+        <div class="row justify-content-center">
+            {% for agenda in agendas %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card" style="width: 100%;">
                     <h4>Cliente: {{ agenda.usuario.nomeUsuario }}</h4>
                     <p><strong>Serviço:</strong> {{ agenda.preco_servico.servico.nomeServico }}</p>
                     <p><strong>Valor do serviço:</strong> {{ agenda.preco_servico.PrecoServico }}</p>
                     <p><strong>Data:</strong> {{ agenda.dataAtendimento.strftime('%d/%m/%Y') }}</p>
                     <p><strong>Horário:</strong> {{ agenda.horarioAtendimento.strftime('%H:%M') }}</p>
-                    
+
                     {% if agenda.idStatus == 2 %}
-                    <p><strong>Status:<span style="color: red;">{{ agenda.status.descricao }}</span></strong></p>
-                    {% else %}
-                    <p><strong>Status:<span style="color: green;">{{ agenda.status.descricao }}</span></strong></p>
+                    <p><strong>Status:<span style="color: red;"> {{ agenda.status.descricao }}</span></strong></p>
+                    {% elif agenda.idStatus == 1 %}
+                    <p><strong>Status<span style="color: rgb(0, 34, 255);"> {{ agenda.status.descricao
+                                }}</span></strong>
+                    </p>
+                    {% elif agenda.idStatus == 3 %}
+                    <p><strong>Status<span style="color: green;"> {{ agenda.status.descricao }}</span></strong></p>
                     {% endif %}
 
                     <p><strong>Telefone para contato:</strong> {{ agenda.usuario.telefone }}</p>
-                    <p><strong>Email para contato:</strong> {{ agenda.usuario.email  }} </p>
+                    <p><strong>Email para contato:</strong> {{ agenda.usuario.email }} </p>
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
         </div>
     </div>
-
-
+    
     <script src="../static/homepage/homepage.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

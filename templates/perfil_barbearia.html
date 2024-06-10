@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/perfil/perfil.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="shortcut icon" href="../../static/imgs/nareguaRemoved.png" type="image/x-icon">
+    <title>Barbearia - Perfil do Barbeiro</title>
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+    {% block navbar %}
+    {% endblock %}
+
+    <div class="profile-container">
+        <div class="profile-card">
+            <div class="dropdown">
+                <button class="editProf" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-grid" viewBox="0 0 16 16">
+                        <path
+                            d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z" />
+                    </svg>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><button class="dropdown-item" onclick="toggleEditMode()">Editar perfil</button></li>
+                </ul>
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <form action="/coletar-alt-barbearia" method="post">
+                <div class="profile-header">
+
+
+                    <span class="profName" id="profile-name" contenteditable="false">{{ barbearia.nomeBarbearia
+                        }}</span>
+                    <input type="text" name="novoNome" id="profile-name-input" style="display:none;"
+                        value="{{ barbearia.nomeBarbearia }}">
+                    <br><br>
+
+                    <div class="switch-container" id="switch-container" style="display:none;">
+                        <span id="online-status">{{ barbearia.disponibilidade.capitalize() }}</span> <br>
+                        <label class="switch">
+                            <input type="checkbox" name="switch" id="profile-switch" onchange="toggleOnlineStatus()">
+                            <span class="slider round"></span>
+                        </label>
+
+                    </div>
+
+                </div>
+                <div class="profile-body">
+                    <h3>Informações</h3>
+                    {% if barbearia.disponibilidade == 'inativo' %}
+                    <strong style="color: rgb(98, 161, 255);">
+                        <p>Você esta inativo. Altere o status de sua barbearia ao editar perfil no canto superior do seu
+                            perfil.</p>
+                    </strong>
+                    {% else %}
+                    <strong style="color: rgb(42, 148, 53);">
+                        <p>Você esta Ativo. Altere o status de sua barbearia ao editar perfil no canto superior do seu
+                            perfil.</p>
+                    </strong>
+                    {% endif %}
+                    <input type="hidden" name="idBarbearia" value="{{ barbearia.idBarbearia }}">
+                    <p style="margin-top: 15px;"><strong>Telefone: </strong> <span id="profile-phone"><br>{{ barbearia.telefone }}</span></p>
+                    <input type="text" name="novoTelefone" id="profile-phone-input" style="display:none;"
+                        value="{{ barbearia.telefone }}">
+
+                        <p style="margin-top: 15px;"><strong>Email: </strong> <span id="profile-email"><br>{{ usuario.email }}</span></p>
+                    <input type="email" name="novoEmail" id="profile-email-input" style="display:none;"
+                        value="{{ usuario.email }}">
+
+                        <p style="margin-top: 15px;"><strong>Endereço: </strong> <span id="profile-address"><br>{{ barbearia.enderecoBarbearia
+                            }}</span></p>
+                    <input type="text" name="novoEndereco" id="profile-address-input" style="display:none;"
+                        value="{{ barbearia.enderecoBarbearia }}">
+
+                        <p style="margin-top: 15px;"><strong>Funcionários disponíveis: </strong> <span id="profile-qtdBarbeiros">{{
+                            barbearia.qtdBarbeiros }}</span></p>
+                    <input type="text" name="novaQtdBarbeiros" id="profile-qtdBarbeiros-input" style="display:none;"
+                        value="{{ barbearia.qtdBarbeiros }}">
+
+                        <p style="margin-top: 15px;"><strong>Horário de abertura: </strong> <span id="profile-horaInicio"><br>{{ barbearia.horaInicio
+                            }}</span></p>
+                    <input type="text" name="novaHoraInicio" id="profile-horaInicio-input" style="display:none;"
+                        value="{{ barbearia.horaInicio }}">
+
+                        <p style="margin-top: 15px;"><strong>Horário de fechamento: </strong> <span id="profile-horaFim"><br>{{ barbearia.horaFim
+                            }}</span></p>
+                    <input type="text" name="novaHoraFinal" id="profile-horaFim-input" style="display:none;"
+                        value="{{ barbearia.horaFim }}">
+
+                    <p style="margin-top: 15px;"><strong>Serviços prestados:</strong></p>
+                    {% for nome_servico, valor_servico in servico %}
+                    <p>{{ nome_servico }} - R${{ valor_servico }}</p>
+                    {% endfor %}
+                    <strong>
+                        <p id="profile-msg-servicoPrestado" style="display: none;">Para modificar os serviços prestados,
+                            acesse a opção de "Minha conta" e "Serviços Prestados".
+                        </p>
+                    </strong>
+                </div>
+                <br>
+                <button id="save-btn" name="action" style="display:none;" type="submit" value="Salvar">Salvar</button>
+                <button id="cancel-btn" name="action" style="display:none;" type="submit"
+                    value="Cancelar">Cancelar</button>
+            </form>
+
+        </div>
+    </div>
+
+    <footer style="margin-top: 100px;">
+        <div class="container">
+            <p>&copy; 2024 Na Régua - Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="../static/homepage/homepage.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var switchValue = "{{ barbearia.disponibilidade }}";
+            var switchCheckbox = document.getElementById('profile-switch');
+            var status = document.getElementById('online-status');
+
+            if (switchValue === 'ativo') {
+                switchCheckbox.checked = true;
+            } else {
+                switchCheckbox.checked = false;
+            }
+        });
+
+
+
+        function toggleOnlineStatus() {
+            var checkbox = document.getElementById('profile-switch');
+            var status = document.getElementById('online-status');
+
+            if (checkbox.checked) {
+                status.textContent = 'Ativo';
+                console.log('ativo')
+            } else {
+                status.textContent = 'Inativo';
+                console.log('inativo')
+            }
+        }
+
+
+        function toggleEditMode() {
+            var isEditing = document.getElementById('profile-name-input').style.display === 'none';
+            var profileName = document.getElementById('profile-name');
+            var profileNameInput = document.getElementById('profile-name-input');
+            var profilePhone = document.getElementById('profile-phone');
+            var profilePhoneInput = document.getElementById('profile-phone-input');
+            var profileEmail = document.getElementById('profile-email');
+            var profileEmailInput = document.getElementById('profile-email-input');
+            var profileAddress = document.getElementById('profile-address');
+            var profileAddressInput = document.getElementById('profile-address-input');
+            var profileQtdBarbeiros = document.getElementById('profile-qtdBarbeiros');
+            var profileQtdBarbeirosInput = document.getElementById('profile-qtdBarbeiros-input');
+            var profileHoraInicio = document.getElementById('profile-horaInicio');
+            var profileHoraInicioInput = document.getElementById('profile-horaInicio-input');
+            var profileHoraFim = document.getElementById('profile-horaFim');
+            var profileHoraFimInput = document.getElementById('profile-horaFim-input');
+            var profileMsgServico = document.getElementById('profile-msg-servicoPrestado');
+            var saveBtn = document.getElementById('save-btn');
+            var cancelBtn = document.getElementById('cancel-btn');
+            var switchContainer = document.getElementById('switch-container');
+
+            if (isEditing) {
+                profileName.style.display = 'none';
+                profileNameInput.style.display = 'inline';
+                profilePhone.style.display = 'none';
+                profilePhoneInput.style.display = 'inline';
+                profileEmail.style.display = 'none';
+                profileEmailInput.style.display = 'inline';
+                profileAddress.style.display = 'none';
+                profileAddressInput.style.display = 'inline';
+                profileQtdBarbeiros.style.display = 'none';
+                profileQtdBarbeirosInput.style.display = 'inline';
+                profileHoraInicio.style.display = 'none';
+                profileHoraInicioInput.style.display = 'inline';
+                profileHoraFim.style.display = 'none';
+                profileHoraFimInput.style.display = 'inline';
+                profileMsgServico.style.display = 'inline';
+                saveBtn.style.display = 'inline';
+                cancelBtn.style.display = 'inline';
+                switchContainer.style.display = 'block';
+
+            } else {
+                profileName.style.display = 'inline';
+                profileNameInput.style.display = 'none';
+                profilePhone.style.display = 'inline';
+                profilePhoneInput.style.display = 'none';
+                profileEmail.style.display = 'inline';
+                profileEmailInput.style.display = 'none';
+                profileAddress.style.display = 'inline';
+                profileAddressInput.style.display = 'none';
+                profileQtdBarbeiros.style.display = 'inline';
+                profileQtdBarbeirosInput.style.display = 'none';
+                profileHoraInicio.style.display = 'inline';
+                profileHoraInicioInput.style.display = 'none';
+                profileHoraFim.style.display = 'inline';
+                profileHoraFimInput.style.display = 'none';
+                profileMsgServico.style.display = 'none';
+                saveBtn.style.display = 'none';
+                cancelBtn.style.display = 'none';
+                switchContainer.style.display = 'none';
+            }
+        }
+
+        function saveProfile() {
+            var profileNameInput = document.getElementById('profile-name-input');
+            var profilePhoneInput = document.getElementById('profile-phone-input');
+            var profileEmailInput = document.getElementById('profile-email-input');
+            var profileAddressInput = document.getElementById('profile-address-input');
+            var profileQtdBarbeirosInput = document.getElementById('profile-qtdBarbeiros-input');
+            var profileHoraInicioInput = document.getElementById('profile-horaInicio-input');
+            var profileHoraFimInput = document.getElementById('profile-horaFim-input');
+            var profileSwitch = document.getElementById('profile-switch');
+            var status = document.getElementById('online-status');
+
+            document.getElementById('profile-name').textContent = profileNameInput.value;
+            document.getElementById('profile-phone').textContent = profilePhoneInput.value;
+            document.getElementById('profile-email').textContent = profileEmailInput.value;
+            document.getElementById('profile-address').textContent = profileAddressInput.value;
+            document.getElementById('profile-qtdBarbeiros').textContent = profileQtdBarbeirosInput.value;
+            document.getElementById('profile-horaInicio').textContent = profileHoraInicioInput.value;
+            document.getElementById('profile-horaFim').textContent = profileHoraFimInput.value;
+
+            toggleEditMode();
+        }
+    </script>
+
+</body>
+
+</html>
