@@ -52,7 +52,14 @@
                     <div class="col-md-4" style="padding: 10px; ">
                         <div class="card">
                             <div class="card-header">
+
+                                {% if current_user.idBarbearia_fk == barbearia_proximas.idBarbearia %}
                                 <h2>{{ barbearia_proximas.nomeBarbearia }}</h2>
+                                <strong><p style="color: rgb(73, 56, 56);">(VOCÊ)</p></strong>
+                                {% else %}
+                                <h2>{{ barbearia_proximas.nomeBarbearia }}</h2>
+                                {% endif %}
+                                
 
                                 <p><strong></strong>{{ barbearia_proximas.endereco }}</p>
                                 <p><strong>Barbeiros disponíveis: </strong>{{ barbearia_proximas.qtdBarbeiros }}</p>
@@ -67,7 +74,7 @@
                             </div>
                             <div class="card-footer">
                                 <a
-                                    href="{{ url_for('visitar_barbearia', nome_barbearia = barbearia_proximas.nomeBarbearia, distancia = distancias_proximas) }}">
+                                    href="{{ url_for('visitar_barbearia', perfil_barbearia = barbearia_proximas.nomeBarbearia, distancia = distancias_proximas) }}">
                                     <button class="btn-agendar">Visitar Barbearia</button>
                                 </a>
                             </div>
@@ -76,10 +83,15 @@
                     {% endfor %}
                     <br>
                     {% for barbearia, distancia, valor_servico, id_servico, duracao in barbearias_valores_distancia %}
+                    {% if barbearia.disponibilidade == 'ativo' %}
                     <div class="col-md-4" style="padding: 10px; ">
                         <div class="card">
                             <div class="card-header">
+                                {% if current_user.idBarbearia_fk == 'barbearia.idBarbearia' %}
+                                <h2>{{ barbearia.nomeBarbearia }}(Você)</h2>
+                                {% else %}
                                 <h2>{{ barbearia.nomeBarbearia }}</h2>
+                                {% endif %}
                                 <p>{{ nome_servico }}</p>
                                 <h5 style="font-size: 14px;">Se encontra á: {{ distancia }}km de você</h5>
                             </div>
@@ -102,6 +114,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>

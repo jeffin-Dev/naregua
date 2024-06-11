@@ -24,11 +24,10 @@ def get_coordinates(address):
         return None
 
 
-# Função para encontrar estabelecimentos próximos a partir de uma lista de endereços
-def find_nearby_establishments(user_address, establishment_addresses, initial_radius_km=2.0, max_radius_km=5.0, radius_step_km=3.0):
-    
+def find_nearby_establishments(user_address, establishment_addresses, initial_radius_km=2.0, max_radius_km=7.0, radius_step_km=3.5):
     # Obter as coordenadas do endereço do usuário
     user_location = get_coordinates(user_address)
+    print(f"Coordenadas do usuário: {user_location}")
     
     # Verificar se as coordenadas do usuário foram encontradas
     if user_location is None:
@@ -40,15 +39,18 @@ def find_nearby_establishments(user_address, establishment_addresses, initial_ra
     
     # Iterar até atingir o raio máximo ou encontrar estabelecimentos
     while current_radius_km <= max_radius_km and not nearby_establishments:
+        print(f"Procurando barbearias em um raio de {current_radius_km} km")
         for establishment_address in establishment_addresses:
             # Obter as coordenadas do endereço do estabelecimento
             establishment_location = get_coordinates(establishment_address)
+            print(f"Coordenadas da barbearia: {establishment_location}")
             if establishment_location:
                 # Calcular a distância entre o usuário e o estabelecimento
                 distance = geodesic(
                     (user_location.latitude, user_location.longitude), 
                     (establishment_location.latitude, establishment_location.longitude)
                 ).kilometers
+                print(f"Distância calculada: {distance} km")
                 # Verificar se a distância está dentro do raio atual
                 if distance <= current_radius_km:
                     nearby_establishments.append({
@@ -64,32 +66,33 @@ def find_nearby_establishments(user_address, establishment_addresses, initial_ra
     else:
         # Opcional: ordenar os estabelecimentos encontrados por distância
         nearby_establishments.sort(key=lambda x: x['distance_km'])
+        print(f"Barbearias encontradas: {nearby_establishments}")
 
     return nearby_establishments
 
 
-# Função para obter barbearias próximas e suas distâncias a partir de um endereço
 def obter_barbearia_e_distancia(barbearias, endereco):
     lista_barbearias_proximas = []
     lista_distancias_barbearia = []
     
     try:
         for barbearia in barbearias:
+            
             # Encontrar barbearias dentro de um raio de 5 km
             barbearias_dentro_de_5_km = find_nearby_establishments(endereco, [barbearia.enderecoBarbearia])
             
-            
             print("Estabelecimentos próximos:")
+            
             for establish in barbearias_dentro_de_5_km:
                 # Adicionar barbearias encontradas à lista de barbearias próximas
-                lista_barbearias_proximas.extend(
-                    Barbearia.query.filter_by(enderecoBarbearia=establish['address'])
-                )
-                print(f"Endereço: {establish['address']} - Distância: {establish['distance_km']:.2f} km")
+                barbearia_proxima = Barbearia.query.filter_by(enderecoBarbearia=establish['address']).first()
+                if barbearia_proxima:
+                    lista_barbearias_proximas.append(barbearia_proxima)
+                    print(f"Barbearia encontrada: {barbearia_proxima.nomeBarbearia} - Endereço: {establish['address']} - Distância: {establish['distance_km']:.2f} km")
                 
-                # Adicionar distância à lista de distâncias
-                distancia = "{:.2f}".format(establish['distance_km'])
-                lista_distancias_barbearia.append(distancia)
+                    # Adicionar distância à lista de distâncias
+                    distancia = "{:.2f}".format(establish['distance_km'])
+                    lista_distancias_barbearia.append(distancia)
             
         # Verificar se nenhuma barbearia foi encontrada
         if not lista_barbearias_proximas:
@@ -100,10 +103,11 @@ def obter_barbearia_e_distancia(barbearias, endereco):
         
     # Combinar barbearias e distâncias em uma lista de tuplas
     barbearias_e_distancias = [
-        (barbearia_proximas, distancias_proximas) 
-        for barbearia_proximas, distancias_proximas in zip(lista_barbearias_proximas, lista_distancias_barbearia)
+        (barbearia_proxima, distancia_proxima) 
+        for barbearia_proxima, distancia_proxima in zip(lista_barbearias_proximas, lista_distancias_barbearia)
     ]
     
+    print(f"Barbearias e distâncias combinadas: {barbearias_e_distancias}")
+    
     return barbearias_e_distancias
-
 

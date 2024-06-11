@@ -1,5 +1,7 @@
 from flask import Flask, render_template, flash, redirect, url_for, request, jsonify, session
 from model import db, Usuario, Agenda, Barbearia, PrecoServico, Servico, init_db
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy import and_
 from flask_login import LoginManager, login_user, UserMixin, login_required, current_user, logout_user
 from scripts.scripts import calcular_horarios_disponiveis, calcular_horarios_indisponiveis, converter_duracao_para_minutos, enviar_email_recuperar_senha, endereco_cliente_simplificado
 from scripts.geolocalizacao import find_nearby_establishments, obter_barbearia_e_distancia
@@ -180,8 +182,8 @@ def coletar_cadastro():
         flash('Quantidade de barbeiros inválida.', 'error')
         return redirect(url_for('cadastrar'))
     
-    
     if temBarbearia == 'nao':
+        try:
         # Verifica se as senhas fornecidas coincidem e cria o usuario.
             if str(senha_cliente1) == str(senha_cliente2):
                 print('SENHA:', senha_barbearia1, senha_barbearia2)
@@ -214,6 +216,19 @@ def coletar_cadastro():
                 return redirect(url_for('cadastrar'))
             
             # Se o usuario for uma barbearia, vamos criar sua barbearia.
+        except IntegrityError as e:
+            db.session.rollback()
+            if 'usuario.cpf_UNIQUE' in str(e.orig):
+                flash('CPF já cadastrado. Por favor, use um CPF diferente.', 'error')
+                return redirect(url_for('cadastrar'))
+            elif 'usuario.email_UNIQUE' in str(e.orig):
+                flash('Email já cadastrado. Por favor, use um CPF diferente.', 'error')
+                return redirect(url_for('cadastrar'))
+            else:
+                flash('Erro ao criar usuário. Tente novamente.', 'error')
+                return redirect(url_for('cadastrar'))
+            
+                
     if temBarbearia == 'sim':
         
         if str(senha_barbearia1) == str(senha_barbearia2):
@@ -255,6 +270,7 @@ horario de fechamento: {horaFim}
             flash('As senhas não coincidem. Tente novamente.','error')
             # Redireciona de volta para a página de cadastro.
             return redirect(url_for('cadastrar'))
+        
 
 
 # ------------------------------------------------ Esqueci minha senha -------------------------------------
@@ -377,22 +393,21 @@ def barber():
         # Converte o valor do campo 'barbeiro' do usuário atual para inteiro
         lista_barbearias = []
         barbeiro = int(current_user.barbeiro)
-        barbearia = current_user.idBarbearia_fk
-        print('ID BARBER:', barbearia)
         usuario = Usuario.query.filter_by(idUsuario=current_user.idUsuario).first()
         
         if usuario is None:
-                raise ValueError("Usuário não encontrado no banco de dados")
-            
-        if barbearia:
-            nome = Barbearia.query.filter_by(idBarbearia = barbearia).first()
-            nome = nome.nomeBarbearia
-            print(nome)
+            raise ValueError("Usuário não encontrado no banco de dados")
+        
+        if barbeiro == 1:
+            perfil_barbearia = Barbearia.query.filter_by(idBarbearia = current_user.idBarbearia_fk).first().nomeBarbearia
+            nome = None
             
         else:
-            print('Caiu aqui')
+            perfil_barbearia = None
             nome = usuario.nomeUsuario
-            print('Nome do usuario:', nome)
+            print('Nome do usuario:', nome)    
+        
+
     
         # Renderiza o template 'sistema-homepage.html', passando o valor de 'barbeiro' e a lista de todos os serviços
         barbearias = Barbearia.query.all()
@@ -416,9 +431,8 @@ def barber():
             
             if not barbearias_e_distancias:
                 flash('Nenhuma barbearia encontrada proxima a você.', 'error')
-                
-            print('Nome da Barbearia:', nome)
-            return render_template('sistema-homepage.html', barbeiro=barbeiro, servicos=Servico.query.all(), lista_barbearias_proximas=barbearias_e_distancias, enderecoCliente = endereco_simplificado, nome_barbearia = nome, usuario = nome)
+            
+            return render_template('sistema-homepage.html', barbeiro=barbeiro, servicos=Servico.query.all(), lista_barbearias_proximas=barbearias_e_distancias, enderecoCliente = endereco_simplificado, perfil_barbearia = perfil_barbearia, usuario = nome)
         
         else:
             
@@ -431,7 +445,7 @@ def barber():
             barbearias_e_distancias = obter_barbearia_e_distancia(lista_barbearias, usuario.enderecoCliente)
                 
             print('Nome da barbearia:', nome)
-            return render_template('sistema-homepage.html', barbeiro=barbeiro, servicos=Servico.query.all(), lista_barbearias_proximas=barbearias_e_distancias, enderecoCliente = usuario.enderecoCliente, nome_barbearia = nome, usuario = nome)
+            return render_template('sistema-homepage.html', barbeiro=barbeiro, servicos=Servico.query.all(), lista_barbearias_proximas=barbearias_e_distancias, enderecoCliente = usuario.enderecoCliente, nome_barbearia = nome, usuario = nome, perfil_barbearia = perfil_barbearia)
         
     else:
         barbearias = Barbearia.query.all()
@@ -514,9 +528,9 @@ def normalize_address(address):
     return re.sub(r'\W+', '', address).lower()
 
 
-@app.route('/perfil-barbearia/<nome_barbearia>/<distancia>')
-def visitar_barbearia(nome_barbearia, distancia):
-    barbearia = Barbearia.query.filter_by(nomeBarbearia = nome_barbearia).first()
+@app.route('/perfil-barbearia/<perfil_barbearia>/<distancia>')
+def visitar_barbearia(perfil_barbearia, distancia):
+    barbearia = Barbearia.query.filter_by(nomeBarbearia = perfil_barbearia).first()
     preco_servicos = PrecoServico.query.filter_by(idBarbearia = barbearia.idBarbearia).all()
     print(preco_servicos)
     servicos_dict = {}
@@ -569,13 +583,15 @@ def servico_escolhido(nome_servico):
 
     print('Acessando a pagina do serviço:', nome_servico)    
 
+    endereco_simplificado = session.get('endereco_simplificado', None)
+    
     if current_user.is_authenticated:
-        endereco_simplificado = session.get('endereco_simplificado', None)
+        
         usuario = Usuario.query.filter_by(idUsuario=current_user.idUsuario).first()
         
         if preco_servico:
             
-            try:        
+            try:    
                 # Inicializa listas para armazenar barbearias, valores dos serviços e IDs dos serviços
                 valores_servicos = []
                 id_servico = []
@@ -589,7 +605,19 @@ def servico_escolhido(nome_servico):
                     nome_barbearia = preco.idBarbearia
                     nome_barbearia = Barbearia.query.filter_by(idBarbearia = nome_barbearia).first()
                     nome_barbearia = nome_barbearia.nomeBarbearia
-
+                    
+                    if current_user.barbeiro == '1':
+                        nome = None
+                        barbearia_id = current_user.idBarbearia_fk
+                        perfil_barbearia = Barbearia.query.filter_by(idBarbearia = barbearia_id).first().nomeBarbearia
+                        validacao = True
+                        print(perfil_barbearia)
+                        
+                    else:
+                        perfil_barbearia = None
+                        nome = current_user.nomeUsuario
+                        validacao = False
+                    
                     
                     duracao.append(preco.duracao) 
                     valores_servicos.append(preco.PrecoServico)  # Adiciona o valor do serviço à lista
@@ -597,13 +625,16 @@ def servico_escolhido(nome_servico):
 
                     if preco:
                         id_barbearia = preco.idBarbearia  # Obtém o ID da barbearia associado ao preço do serviço
-                        barbearias = Barbearia.query.filter_by(idBarbearia=id_barbearia).all()  # Consulta a barbearia pelo ID
+                        barbearias = Barbearia.query.filter_by(disponibilidade='ativo').all()  # Consulta a barbearia pelo ID
+                        
                         
                         if endereco_simplificado:
                             print('Endereço Geolocalização:', endereco_simplificado)
                             
                             # Chama a função para obter as barbearias próximas
+                            print(barbearias)
                             barbearias_e_distancias = obter_barbearia_e_distancia(barbearias, endereco_simplificado)
+                            print(barbearias_e_distancias)
                             
                             if barbearias_e_distancias:
                                 for barbearia_proxima, distancia in barbearias_e_distancias:
@@ -613,12 +644,13 @@ def servico_escolhido(nome_servico):
                                 flash(f'Você selecionou o serviço: {nome_servico}.', 'servico')
                                 flash(f'Obs: {servico.descricao}', 'descricao')
                                 # Renderiza o template 'sistema-homepage.html' passando todos os serviços, as barbearias, os valores dos serviços e o nome do serviço
-                                return render_template('sistema-homepage.html', servicos=Servico.query.all(), barbearias_valores_distancia=zip(lista_barbearias, lista_distancias, valores_servicos, id_servico, duracao), nome_servico=nome_servico, enderecoCliente = usuario.enderecoCliente, nome_barbearia = nome_barbearia)        
+                                
+                                return render_template('sistema-homepage.html', servicos=Servico.query.all(), barbearias_valores_distancia=zip(lista_barbearias, lista_distancias, valores_servicos, id_servico, duracao), nome_servico=nome_servico, enderecoCliente = endereco_simplificado, nome_barbearia = nome_barbearia, perfil_barbearia = perfil_barbearia, usuario = nome)        
                                     
                             else:
                     
                                 flash('Nenhuma barbearia encontrada para o serviço escolhido em sua região.', 'error')
-                                return render_template('sistema-homepage.html', servicos=Servico.query.all(), nome_servico=nome_servico, enderecoCliente = endereco_simplificado, nome_barbearia = nome_barbearia)
+                                return render_template('sistema-homepage.html', servicos=Servico.query.all(), nome_servico=nome_servico, enderecoCliente = endereco_simplificado, nome_barbearia = nome_barbearia, usuario = nome)
                         
                         else:
                             print('Endereço Geolocalização:', usuario.enderecoCliente)
@@ -651,18 +683,26 @@ def servico_escolhido(nome_servico):
                 nome_barbearia = Barbearia.query.filter_by(idBarbearia = nome_barbearia).first()
                 nome_barbearia = nome_barbearia.nomeBarbearia
 
-                # Em caso de exceção, exibe uma mensagem de erro e redireciona para a página 'barber'
-                flash('Nenhuma barbearia encontrada para o serviço escolhido em sua região.', 'error')
-                return render_template('sistema-homepage.html', servicos=Servico.query.all(), nome_servico=nome_servico, nome_barbearia=nome_barbearia)
+                barbearia_id = current_user.idBarbearia_fk
+                try:
+                    perfil_barbearia = Barbearia.query.filter_by(idBarbearia = barbearia_id).first().nomeBarbearia
+                    print(perfil_barbearia)
+                    
+                    # Em caso de exceção, exibe uma mensagem de erro e redireciona para a página 'barber'
+                    flash('Nenhuma barbearia encontrada para o serviço escolhido em sua região.', 'error')
+                    return render_template('sistema-homepage.html', servicos=Servico.query.all(), nome_servico=nome_servico, nome_barbearia=nome_barbearia, enderecoCliente = endereco_simplificado, perfil_barbearia = perfil_barbearia)
+                except:
+                    return render_template('sistema-homepage.html', servicos=Servico.query.all(), nome_servico=nome_servico, nome_barbearia=nome_barbearia, enderecoCliente = endereco_simplificado, usuario = current_user.nomeUsuario)
     
         else:
             flash(f'Você selecionou o serviço: {nome_servico}.', 'servico')
             flash(f'Obs: {servico.descricao}', 'descricao')
             flash('Nenhuma barbearia encontrada para o serviço escolhido em sua região.', 'error')
-            return render_template('sistema-homepage.html', servicos=Servico.query.all(), nome_servico=nome_servico, nome_barbearia=nome_barbearia)   
+            barbearia = Barbearia.query.filter_by(idBarbearia=current_user.idBarbearia_fk).first()
+            
+            return render_template('sistema-homepage.html', servicos=Servico.query.all(), nome_servico=nome_servico, enderecoCliente = endereco_simplificado, perfil_barbearia = barbearia.nomeBarbearia)   
         
     else:
-        endereco_simplificado = session.get('endereco_simplificado', None)
             
         if preco_servico:
             try:        
@@ -683,6 +723,7 @@ def servico_escolhido(nome_servico):
                         id_barbearia = preco.idBarbearia  # Obtém o ID da barbearia associado ao preço do serviço
                         barbearias = Barbearia.query.filter_by(idBarbearia=id_barbearia).all()  # Consulta a barbearia pelo ID
                         
+                        print(barbearias)
                         if endereco_simplificado:
                             print('Endereço Geolocalização:', endereco_simplificado)
                             
@@ -696,12 +737,12 @@ def servico_escolhido(nome_servico):
                                     
                                 flash(f'Você selecionou o serviço: {nome_servico}.', 'servico')
                                 flash(f'Obs: {servico.descricao}', 'descricao')
-                                return render_template('sistema-homepage.html', servicos=Servico.query.all(), barbearias_valores_distancia=zip(lista_barbearias, lista_distancias, valores_servicos, id_servico, duracao), nome_servico=nome_servico)
+                                return render_template('sistema-homepage.html', servicos=Servico.query.all(), barbearias_valores_distancia=zip(lista_barbearias, lista_distancias, valores_servicos, id_servico, duracao), nome_servico=nome_servico, enderecoCliente = endereco_simplificado)
                                     
                             else:
                                 print('Nenhuma barbearia encontrada no raio de quilometragem.')
                                 flash('Nenhuma barbearia encontradada para o serviço escolhido em sua região.', 'error')
-                                return render_template('sistema-homepage.html', servicos=Servico.query.all(), nome_servico=nome_servico)
+                                return render_template('sistema-homepage.html', servicos=Servico.query.all(), nome_servico=nome_servico, enderecoCliente = endereco_simplificado)
 
                         else:
                             print('Nenhum endereço na geolocalização.')
@@ -712,8 +753,8 @@ def servico_escolhido(nome_servico):
                 print(e)
                 # Em caso de exceção, exibe uma mensagem de erro e redireciona para a página 'sistema-homepage'
                 flash('Nenhum barbeiro encontrado para o serviço escolhido em sua região.', 'error')
-                return render_template('sistema-homepage.html', servicos=Servico.query.all(), nome_servico=nome_servico)
-    return render_template('sistema-homepage.html', servicos=Servico.query.all(), nome_servico=nome_servico)                    
+                return render_template('sistema-homepage.html', servicos=Servico.query.all(), nome_servico=nome_servico, enderecoCliente = endereco_simplificado)
+      
             
 # ------------------------------------------------ Página de agendamento -----------------------------------
 # Esta rota renderiza uma página HTML para permitir que os usuários visualizem e reservem horários disponíveis para um serviço específico em uma determinada barbearia.
@@ -838,7 +879,12 @@ def coletar_agendamento(id_servico):
     elif dataAgendamento_datetime == data_atual and hora_atual > horaAgendamento_datetime:
         flash('Escolha um horário válido.', 'error')
         return redirect(url_for('agendamento', nome_barbearia = PrecoServico.query.filter_by(idPrecoServico = id_servico).first().idBarbearia, id_servico = id_servico))
-        
+    
+    agendamento_existente = Agenda.query.filter(and_(Agenda.idUsuario == current_user.idUsuario, Agenda.idPrecoServico == id_servico, Agenda.dataAtendimento == dataAgendamento)).first()
+    if agendamento_existente:
+        flash('Você já tem um agendamento para este serviço nesta data.', 'error')
+        return redirect(url_for('agendamento', nome_barbearia = PrecoServico.query.filter_by(idPrecoServico = id_servico).first().idBarbearia, id_servico = id_servico))
+    
     # Cria uma nova instância de 'Agenda' com os dados coletados e o ID do serviço fornecido
     nova_agenda = Agenda(idPrecoServico=id_servico, idUsuario=current_user.idUsuario, idStatus=1, dataAtendimento=dataAgendamento, horarioAtendimento=horaAgendamento)
     
@@ -905,7 +951,7 @@ def reservasCliente():
         db.session.commit()
         
     # Renderiza o template 'reservas-clientes.html', passando a lista de reservas futuras
-    return render_template('reservas-clientes.html', agendas=agendas_ordenadas, servicos=Servico.query.all())
+    return render_template('reservas-clientes.html', agendas=agendas_ordenadas, servicos=Servico.query.all(), usuario = current_user.nomeUsuario)
 
 #Essa rota Cancela o agendamento caso o cliente peça.
 @app.route('/cancelar-agendamento/<int:idReserva>')
@@ -958,10 +1004,10 @@ def reservasBarbeiro():
             agendas_ordenadas.reverse()
             
             # Renderiza o template 'reservas-barbeiro.html', passando a lista de agendas ordenadas
-            return render_template('reservas-barbeiro.html', agendas=agendas_ordenadas, nome_barbearia=nome_barbearia, servicos=Servico.query.all())
+            return render_template('reservas-barbeiro.html', agendas=agendas_ordenadas, nome_barbearia=nome_barbearia, servicos=Servico.query.all(), perfil_barbearia = nome_barbearia)
         else:
             # Se não houver agendas, renderiza o template com uma lista vazia
-            return render_template('reservas-barbeiro.html', agendas=[], nome_barbearia=nome_barbearia, servicos=Servico.query.all())
+            return render_template('reservas-barbeiro.html', agendas=[], nome_barbearia=nome_barbearia, servicos=Servico.query.all(), perfil_barbearia = nome_barbearia)
         
     else:
         flash("Acesso negado. Você não é um barbeiro.",'error')
@@ -975,7 +1021,7 @@ def reservasBarbeiro():
 def cadastrarServicos():
     usuario = Usuario.query.filter_by(idUsuario = current_user.idUsuario).first()
     barbearia = Barbearia.query.filter_by(idBarbearia = usuario.idBarbearia_fk).first()
-    return render_template('cadastrar_servico.html', servicos = Servico.query.all(), nome_barbearia = barbearia.nomeBarbearia)
+    return render_template('cadastrar_servico.html', servicos = Servico.query.all(), nome_barbearia = barbearia.nomeBarbearia, perfil_barbearia = barbearia.nomeBarbearia)
     
 
 # Define a função que coleta os serviços do barbeiro e salva no banco
@@ -1027,9 +1073,9 @@ def coletarServicosBarbeiro():
 
 # ---------------------------------------- Página de perfil para barbearia ----------------------------
 
-@app.route('/meu-perfil-barbearia/<nome_barbearia>')
-def perfil_barbearia(nome_barbearia):
-    barbearia = Barbearia.query.filter_by(nomeBarbearia = nome_barbearia).first()
+@app.route('/meu-perfil-barbearia/<perfil_barbearia>')
+def perfil_barbearia(perfil_barbearia):
+    barbearia = Barbearia.query.filter_by(nomeBarbearia = perfil_barbearia).first()
     usuario = Usuario.query.filter_by(idBarbearia_fk = barbearia.idBarbearia).first()
     preco_servicos = PrecoServico.query.filter_by(idBarbearia = barbearia.idBarbearia).all()
     
@@ -1062,7 +1108,7 @@ def perfil_barbearia(nome_barbearia):
 
         print(nome_servico, info_servico['preco_servico'], info_servico['data_inicio'])
     
-    return render_template('perfil_barbearia.html', servicos = Servico.query.all(), barbearia = barbearia, usuario = usuario, servico = zip(lista_nomes_servico,lista_valores_servico), nome_barbearia = barbearia.nomeBarbearia)
+    return render_template('perfil_barbearia.html', servicos = Servico.query.all(), barbearia = barbearia, usuario = usuario, servico = zip(lista_nomes_servico,lista_valores_servico), nome_barbearia = barbearia.nomeBarbearia, perfil_barbearia = barbearia.nomeBarbearia)
 
 
 @app.route('/coletar-alt-barbearia', methods=['POST'])
@@ -1096,7 +1142,7 @@ def coletar_alt_barbearia():
             # Atualiza os atributos da barbearia com as novas informações
             barbearia.nomeBarbearia = novoNome
             barbearia.telefone = novoTelefone
-            barbearia.email = novoEmail
+            current_user.email = novoEmail
             barbearia.enderecoBarbearia = novoEndereco
             barbearia.qtdBarbeiros = novaQtdBarbeiros
             barbearia.horaInicio = novaHoraInicio
@@ -1106,10 +1152,10 @@ def coletar_alt_barbearia():
             db.session.commit()
             
             flash('Perfil atualizado.', 'success')
-            return redirect(url_for('perfil_barbearia', nome_barbearia=barbearia.nomeBarbearia))
+            return redirect(url_for('perfil_barbearia', perfil_barbearia=barbearia.nomeBarbearia))
     
     else:
-        return redirect(url_for('perfil_barbearia', nome_barbearia=barbearia.nomeBarbearia))
+        return redirect(url_for('perfil_barbearia', perfil_barbearia=barbearia.nomeBarbearia))
 
 
 # ---------------------------------------- Página de perfil para clientes ----------------------------

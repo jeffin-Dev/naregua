@@ -41,7 +41,7 @@
                 Minha Conta
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{{ url_for('perfil_barbearia', nome_barbearia = nome_barbearia)}}">Perfil</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('perfil_barbearia', perfil_barbearia = perfil_barbearia)}}">Perfil</a></li>
                 <li><a class="dropdown-item" href="{{ url_for('cadastrarServicos') }}">Serviços Prestados</a></li>
                 <li><a class="dropdown-item" href="{{ url_for('reservasBarbeiro') }}">Agendamentos</a></li>
             </ul>
