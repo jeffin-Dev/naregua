@@ -13,10 +13,10 @@ from geopy.geocoders import Nominatim
 app = Flask(__name__)
 
 # Configuração da chave secreta para a aplicação Flask
-app.config['SECRET_KEY'] = 'A123S456D789'
+app.config['SECRET_KEY'] = 'chave secreta'
 
 # Configuração da URI do banco de dados
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost/bdnaregua'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'caminho do banco de dados em local host'
 
 # Desativa a sinalização de modificações de objetos para economizar recursos
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
