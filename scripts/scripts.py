@@ -18,13 +18,13 @@ Código de acesso: {codigo}
     msg['Subject'] = "Código de Segurança para troca de senha Ná Regua"
     
     # Define o remetente do email
-    msg['From'] = 'jeffinhogamer2014@gmail.com'
+    msg['From'] = 'email_para_enviar'
     
     # Define o destinatário do email
     msg['To'] = email
     
     # Define a senha do email (neste caso, uma senha de aplicativo do Gmail)
-    password = 'tkqt zmfa ypwm gxge'
+    password = 'senha_de_app'
     
     # Adiciona um cabeçalho indicando que o conteúdo do email é HTML
     msg.add_header('Content-Type', 'text/html')
